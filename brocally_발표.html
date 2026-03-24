@@ -944,25 +944,27 @@ html, body {
   #sidebar, #topbar, #bottombar { display: none !important; }
 
   /* 레이아웃 리셋 */
-  body, html { width: 297mm; height: 167mm; overflow: hidden; }
-  #app { flex-direction: column; }
-  #main { flex: none; }
-  #stage { padding: 0; background: none; align-items: flex-start; justify-content: flex-start; }
+  body, html { width: 297mm; height: auto; overflow: visible; }
+  #app { flex-direction: column; overflow: visible; }
+  #main { flex: none; overflow: visible; }
+  #stage { padding: 0; background: none; align-items: flex-start; justify-content: flex-start; overflow: visible; height: auto; }
 
-  /* slide-wrap: 전체 페이지 크기 */
+  /* slide-wrap: overflow visible, height auto */
   #slide-wrap {
     width: 297mm !important;
-    height: 167mm !important;
+    height: auto !important;
     max-width: none !important;
     max-height: none !important;
     box-shadow: none !important;
     border-radius: 0 !important;
     position: relative;
+    overflow: visible !important;
   }
 
   /* 모든 슬라이드 표시, 각각 새 페이지 */
   .slide { display: flex !important; position: relative !important; inset: auto !important;
-    width: 297mm !important; height: 167mm !important; page-break-after: always; break-after: page; }
+    width: 297mm !important; height: 167mm !important; page-break-after: always; break-after: page;
+    overflow: hidden !important; }
   .slide:last-child { page-break-after: avoid; break-after: avoid; }
 }
 </style>
@@ -1105,6 +1107,10 @@ html, body {
             <div class="about-info">
               <div class="info-row">📋 <span><strong>지원 구분</strong>&nbsp; 개인</span></div>
               <div class="info-row">☕ <span><strong>창업 분야</strong>&nbsp; 식음료 (카페·음료)</span></div>
+            </div>
+            <div class="about-info" style="margin-top:.8em;">
+              <div class="eyebrow c-green" style="margin-bottom:.5em;font-size:.72em;">업무 경험</div>
+              <div class="info-row">🟢 <span><strong>스타벅스 코리아</strong>&nbsp; 바리스타 (정직원)</span></div>
             </div>
           </div>
           <!-- 구분선 -->
@@ -1723,10 +1729,56 @@ function toggleFull() {
 document.querySelector('.tb-btn.primary').addEventListener('click', toggleFull);
 
 // PDF 저장
-function printPDF() {
-  document.body.classList.add('printing');
-  window.print();
-  document.body.classList.remove('printing');
+async function printPDF() {
+  const btn = document.querySelector('.tb-btn[onclick="printPDF()"]');
+  const origText = btn.textContent;
+  btn.textContent = '생성 중…';
+  btn.disabled = true;
+
+  // jsPDF + html2canvas 동적 로드
+  async function loadScript(src) {
+    return new Promise((res, rej) => {
+      if (document.querySelector(`script[src="${src}"]`)) { res(); return; }
+      const s = document.createElement('script');
+      s.src = src; s.onload = res; s.onerror = rej;
+      document.head.appendChild(s);
+    });
+  }
+  await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+  await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+
+  const { jsPDF } = window.jspdf;
+  const wrap = document.getElementById('slide-wrap');
+  const W = wrap.offsetWidth;
+  const H = wrap.offsetHeight;
+  const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [W, H], hotfixes: ['px_scaling'] });
+
+  const savedCur = cur;
+
+  for (let i = 0; i < slides.length; i++) {
+    btn.textContent = `${i + 1} / ${slides.length}`;
+    show(i);
+    await new Promise(r => setTimeout(r, 200));
+
+    const canvas = await html2canvas(wrap, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      logging: false,
+      width: W,
+      height: H,
+    });
+
+    const imgData = canvas.toDataURL('image/jpeg', 0.92);
+    if (i > 0) pdf.addPage([W, H], 'landscape');
+    pdf.addImage(imgData, 'JPEG', 0, 0, W, H);
+  }
+
+  show(savedCur);
+  pdf.save('brocally_발표.pdf');
+
+  btn.textContent = origText;
+  btn.disabled = false;
 }
 
 show(0);
