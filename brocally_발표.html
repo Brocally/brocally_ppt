@@ -299,13 +299,13 @@ html, body {
 .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3%; }
 
 /* ── Comparison ── */
-.comp-table { width: 100%; }
+.comp-table { width: 100%; height: 100%; }
 .comp-table th, .comp-table td {
-  padding: 6px 10px; text-align: center;
-  font-size: clamp(9px,.9vw,12px);
+  padding: clamp(8px,1vw,14px) 10px; text-align: center;
+  font-size: clamp(11px,1.1vw,15px);
   border-bottom: 1px solid rgba(0,0,0,.06);
 }
-.comp-table th { color: #999; font-weight: 700; font-size: clamp(8px,.8vw,11px); }
+.comp-table th { color: #999; font-weight: 700; font-size: clamp(10px,1vw,13px); }
 .comp-table td:first-child { text-align: left; color: rgba(0,0,0,.65); }
 .comp-table .bro { color: var(--green); font-weight: 700; background: rgba(74,143,92,.08); }
 .comp-table .yes { color: var(--green); }
@@ -464,17 +464,17 @@ html, body {
 }
 .about-profile {
   display: flex;
-  align-items: center;
-  gap: clamp(12px, 1.6vw, 20px);
-  margin-bottom: 7%;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 4%;
 }
 .about-photo {
-  width: clamp(96px, 10.2vw, 136px);
-  aspect-ratio: 4 / 5;
+  width: 100%;
+  max-height: clamp(180px, 24vw, 300px);
   border-radius: 14px;
   object-fit: cover;
-  object-position: center;
-  flex-shrink: 0;
+  object-position: top center;
   border: 1px solid rgba(0,0,0,.08);
 }
 .about-name {
@@ -530,9 +530,9 @@ html, body {
 
 /* about-right 내부 간격 — 우측 콘텐츠 넘침 방지 */
 .about-right .check-list li {
-  margin-bottom: .45em;
-  font-size: clamp(12px, 1.05vw, 15px);
-  line-height: 1.5;
+  margin-bottom: .75em;
+  font-size: clamp(14px, 1.35vw, 18px);
+  line-height: 1.65;
   color: rgba(0,0,0,.68);
 }
 .about-right .check-list li::before {
@@ -542,9 +542,9 @@ html, body {
   margin-top: .1em;
 }
 .about-right .subheading {
-  margin-bottom: 4.6% !important;
+  margin-bottom: 5% !important;
   line-height: 1.24;
-  font-size: clamp(16px, 1.7vw, 24px);
+  font-size: clamp(20px, 2vw, 28px);
 }
 .about-right .check-list {
   margin-top: .25em;
@@ -629,6 +629,70 @@ html, body {
 .price-row:last-child { border-bottom: none; }
 
 /* ⑤ / ⑩ / ⑪ 하단 잘림 방지 — 컴팩트 레이아웃 */
+#s4 > div {
+  padding: calc(3.0vw - 10px) 5% 3.6% !important;
+}
+#s4 .eyebrow {
+  margin-bottom: .45em !important;
+  font-size: clamp(12px, 1.1vw, 15px);
+}
+#s4 .heading {
+  margin-bottom: 1.4% !important;
+  font-size: clamp(34px, 3.6vw, 50px);
+}
+#s4 .service-cards {
+  margin-top: 1.2% !important;
+  gap: 1.8% !important;
+}
+#s4 .svc-card {
+  padding: 4% 5% !important;
+}
+#s4 .svc-icon {
+  font-size: clamp(26px, 3.4vw, 44px);
+  margin-bottom: .5em;
+}
+#s4 .svc-title {
+  margin-bottom: .4em;
+  font-size: clamp(14px, 1.5vw, 20px);
+}
+#s4 .svc-list li {
+  font-size: clamp(12px, 1.15vw, 15px);
+  line-height: 1.45;
+  margin-bottom: .28em;
+}
+#s4 .svc-list {
+  margin-bottom: 0;
+}
+#s4 .svc-img {
+  margin-top: auto !important;
+}
+#s4 .svc-img img {
+  height: clamp(100px, 12vw, 150px) !important;
+}
+
+#s5 > div {
+  padding: calc(4.1vw - 10px) 6% 3.8% !important;
+}
+#s5 .heading {
+  margin-bottom: 2.2% !important;
+}
+#s5 > div > div[style*="grid-template-columns:repeat(3,1fr)"] {
+  margin-bottom: 2.1% !important;
+}
+#s5 > div > div[style*="display:flex;flex-direction:column;gap:10px;"] {
+  gap: 8px !important;
+}
+#s5 .caption {
+  margin-bottom: 1.2% !important;
+}
+#s5 .body {
+  font-size: clamp(11px, 1.02vw, 14px);
+  line-height: 1.45;
+}
+#s5 > div > div[style*="display:flex;align-items:flex-start;gap:12px;background:#f8f8f6"] {
+  padding: 3.1% 4.2% !important;
+}
+
 #s5b > div,
 #s8b > div {
   padding: calc(4.1vw - 10px) 6% 4% !important;
@@ -642,9 +706,12 @@ html, body {
   font-size: clamp(11px, 1.05vw, 14px) !important;
 }
 #s5b .check-list li {
-  margin-bottom: .3em;
-  font-size: clamp(11px, 1.0vw, 14px);
-  line-height: 1.42;
+  margin-bottom: .55em;
+  font-size: clamp(13px, 1.3vw, 17px);
+  line-height: 1.55;
+}
+#s5b .caption {
+  font-size: clamp(12px, 1.2vw, 16px);
 }
 #s8b .roof-ideas {
   margin-top: 2%;
@@ -677,13 +744,15 @@ html, body {
   padding: 5% 6%;
 }
 #s9 .ptable th {
-  padding: 5px 8px;
-  font-size: clamp(8px, .75vw, 10px);
+  padding: 7px 8px;
+  font-size: clamp(10px, 1vw, 13px);
 }
 #s9 .ptable td {
-  padding: 5px 8px;
-  font-size: clamp(10px, .98vw, 13px);
+  padding: 7px 8px;
+  font-size: clamp(12px, 1.2vw, 16px);
 }
+#s9 .budget-right .rev-stat { text-align: center; }
+#s9 .budget-left .caption { font-size: clamp(11px, 1.1vw, 14px); }
 #s9 .bar-row {
   gap: 8px;
   margin-bottom: 6px;
@@ -701,15 +770,16 @@ html, body {
 #s6 { background: #fff; flex-direction: row; align-items: stretch; }
 .diff-left { flex: 1.1; padding: calc(5vw - 12px) 5% 5% 6%; display: flex; flex-direction: column; }
 .diff-right { flex: .9; background: #f5f5f2; padding: calc(5vw - 12px) 6% 5%; display: flex; flex-direction: column; justify-content: flex-start; }
-.comp-wrap { flex: 1; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-start; margin-top: 3%; }
-.strength-list { display: flex; flex-direction: column; gap: 10px; }
+.comp-wrap { flex: 1; overflow: visible; display: flex; flex-direction: column; justify-content: space-between; margin-top: 3%; }
+.strength-list { display: flex; flex-direction: column; gap: 0; flex: 1; margin-top: 3%; }
 .strength-item {
-  display: flex; align-items: center; gap: 12px;
+  display: flex; align-items: center; gap: 12px; flex: 1;
   background: rgba(74,143,92,.06); border: 1px solid rgba(74,143,92,.15);
-  border-radius: 8px; padding: 4% 5%;
+  border-radius: 8px; padding: 3% 5%; margin-bottom: 2%;
 }
-.s-icon { font-size: clamp(16px, 2vw, 24px); flex-shrink: 0; }
-.s-text { font-size: clamp(12px,1.2vw,15px); color: rgba(0,0,0,.72); line-height: 1.4; }
+.strength-item:last-child { margin-bottom: 0; }
+.s-icon { font-size: clamp(18px, 2.2vw, 28px); flex-shrink: 0; }
+.s-text { font-size: clamp(13px,1.3vw,17px); color: rgba(0,0,0,.72); line-height: 1.4; }
 
 /* ⑦ OPS */
 #s7 { background: #fff; flex-direction: column; }
@@ -785,6 +855,7 @@ html, body {
 .rev-stat {
   background: #f8f8f6; border: 1px solid #e8e8e4;
   border-radius: 10px; padding: 5% 6%;
+  display: flex; flex-direction: column; justify-content: center;
 }
 .rev-stat.main { background: rgba(74,143,92,.08); border-color: rgba(74,143,92,.3); }
 .rev-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 2%; margin-top: 2%; flex: 1; }
@@ -795,13 +866,13 @@ html, body {
 
 /* ⑪ MARKETING */
 #s11 { background: #fff; flex-direction: column; }
-.mkt-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 2%; flex: 1; margin-top: 3%; }
+.mkt-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 2%; margin-top: auto; align-content: center; flex: 1; }
 .mkt-card {
   background: #f8f8f6; border: 1px solid #e8e8e4;
-  border-radius: 10px; padding: 5% 6%;
+  border-radius: 10px; padding: 4% 5%;
   display: flex; flex-direction: column;
 }
-.mkt-icon { font-size: clamp(24px,3.5vw,44px); margin-bottom: .6em; }
+.mkt-icon { font-size: clamp(22px,3vw,38px); margin-bottom: .4em; }
 .mkt-title { font-size: clamp(13px,1.45vw,18px); font-weight: 800; color: #111; margin-bottom: .7em; }
 .mkt-items { list-style: none; padding: 0; flex: 1; }
 .mkt-items li { font-size: clamp(11px,1.1vw,14px); color: rgba(0,0,0,.55); line-height: 1.6; margin-bottom: .35em; padding-left: 10px; position: relative; }
@@ -818,9 +889,9 @@ html, body {
 .csr-right { flex: 1; background: #f5f5f2; padding: calc(5vw - 12px) 6% 5%; display: flex; flex-direction: column; }
 .csr-items { display: flex; flex-direction: column; gap: 9px; margin-top: 3%; flex: 1; }
 .csr-item {
-  display: flex; align-items: flex-start; gap: 12px;
+  display: flex; align-items: center; gap: 12px;
   background: rgba(0,0,0,.03); border: 1px solid rgba(0,0,0,.05);
-  border-radius: 8px; padding: 4% 5%;
+  border-radius: 8px; padding: 4% 5%; flex: 1;
 }
 .csr-em { font-size: clamp(16px,2vw,24px); flex-shrink: 0; }
 .csr-text { font-size: clamp(11px,1.1vw,15px); color: rgba(0,0,0,.65); line-height: 1.5; }
@@ -860,6 +931,40 @@ html, body {
 }
 .contact-item strong { color: #111; display: block; margin-bottom: .3em; font-size: clamp(8px,.85vw,11px); color: var(--green); text-transform: uppercase; letter-spacing: .08em; }
 
+/* ══════════════════════════════════════
+   PRINT / PDF
+══════════════════════════════════════ */
+@media print {
+  @page { size: 297mm 167mm landscape; margin: 0; }
+
+  body.printing,
+  body.printing * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  /* UI 숨기기 */
+  #sidebar, #topbar, #bottombar { display: none !important; }
+
+  /* 레이아웃 리셋 */
+  body, html { width: 297mm; height: 167mm; overflow: hidden; }
+  #app { flex-direction: column; }
+  #main { flex: none; }
+  #stage { padding: 0; background: none; align-items: flex-start; justify-content: flex-start; }
+
+  /* slide-wrap: 전체 페이지 크기 */
+  #slide-wrap {
+    width: 297mm !important;
+    height: 167mm !important;
+    max-width: none !important;
+    max-height: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    position: relative;
+  }
+
+  /* 모든 슬라이드 표시, 각각 새 페이지 */
+  .slide { display: flex !important; position: relative !important; inset: auto !important;
+    width: 297mm !important; height: 167mm !important; page-break-after: always; break-after: page; }
+  .slide:last-child { page-break-after: avoid; break-after: avoid; }
+}
 </style>
 </head>
 <body>
@@ -879,6 +984,7 @@ html, body {
       <div id="topbar-right">
         <button class="tb-btn" onclick="go(-1)">이전</button>
         <button class="tb-btn" onclick="go(1)">다음</button>
+        <button class="tb-btn" onclick="printPDF()" style="border-color:var(--green);color:var(--green);">PDF 저장</button>
         <button class="tb-btn primary">전체화면</button>
       </div>
     </div>
@@ -988,7 +1094,7 @@ html, body {
           <!-- 좌: 프로필 -->
           <div class="about-left">
             <div class="eyebrow c-green" style="margin-bottom:.45em;">01 · ABOUT</div>
-            <div class="heading" style="color:#111;margin-bottom:8%;">대표자 소개</div>
+            <div class="heading" style="color:#111;margin-bottom:4%;">대표자 소개</div>
             <div class="about-profile">
               <img src="junkim2.jpg" alt="김준호" class="about-photo">
               <div>
@@ -1045,7 +1151,7 @@ html, body {
                   <li>키블라 방향 표시 · 기도 매트</li>
                 </ul>
                 <div class="svc-img" style="padding:0;overflow:hidden;border:none;background:none;">
-                  <img src="pray.jpg" alt="기도실" style="width:100%;height:clamp(65px,8vw,105px);object-fit:cover;object-position:bottom;border-radius:8px;display:block;">
+                  <img src="pray.jpg" alt="기도실" style="width:100%;height:clamp(120px,14vw,200px);object-fit:cover;object-position:bottom;border-radius:8px;display:block;">
                 </div>
               </div>
               <div class="svc-card svc-2">
@@ -1057,7 +1163,7 @@ html, body {
                   <li>글루텐프리 옵션 운영</li>
                 </ul>
                 <div class="svc-img" style="padding:0;overflow:hidden;border:none;background:none;">
-                  <img src="vegan.png" alt="비건 메뉴" style="width:100%;height:clamp(65px,8vw,105px);object-fit:cover;object-position:center;border-radius:8px;display:block;">
+                  <img src="vegan.png" alt="비건 메뉴" style="width:100%;height:clamp(120px,14vw,200px);object-fit:cover;object-position:center;border-radius:8px;display:block;">
                 </div>
               </div>
               <div class="svc-card svc-3">
@@ -1071,7 +1177,7 @@ html, body {
                   <li>첫 참가 무료 (오픈 프로모션)</li>
                 </ul>
                 <div class="svc-img" style="padding:0;overflow:hidden;border:none;background:none;">
-                  <img src="language_exchange.jpeg" alt="언어교환 모임" style="width:100%;height:clamp(65px,8vw,105px);object-fit:cover;object-position:center;border-radius:8px;display:block;">
+                  <img src="language_exchange.jpeg" alt="언어교환 모임" style="width:100%;height:clamp(120px,14vw,200px);object-fit:cover;object-position:center;border-radius:8px;display:block;">
                 </div>
               </div>
             </div>
@@ -1080,45 +1186,45 @@ html, body {
 
         <!-- ⑤ MARKET — 시장 분석 -->
         <div class="slide" id="s5" data-title="시장 분석">
-          <div style="flex:1;display:flex;flex-direction:column;padding:calc(5vw - 12px) 6% 5%;">
+          <div style="flex:1;display:flex;flex-direction:column;padding:calc(2vw - 4px) 6% 2%;">
             <div class="eyebrow c-green">03 · Market</div>
-            <div class="heading c-white" style="margin-bottom:3%;">시장 분석</div>
+            <div class="heading c-white" style="margin-bottom:1.5%;">시장 분석</div>
             <!-- 핵심 수치 3개 -->
-            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2%;margin-bottom:3%;">
-              <div style="background:rgba(74,143,92,.08);border:1px solid rgba(74,143,92,.2);border-radius:12px;padding:4% 5%;text-align:center;">
-                <div class="stat-val c-green" style="font-size:clamp(28px,4vw,52px);">6,000<span class="stat-unit">명+</span></div>
-                <div class="stat-label c-gray" style="margin-top:6px;">신촌 인근 외국인 유학생</div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2%;margin-bottom:1.5%;">
+              <div style="background:rgba(74,143,92,.08);border:1px solid rgba(74,143,92,.2);border-radius:12px;padding:2% 5%;text-align:center;">
+                <div class="stat-val c-green" style="font-size:clamp(24px,3.5vw,48px);">6,000<span class="stat-unit">명+</span></div>
+                <div class="stat-label c-gray" style="margin-top:4px;">신촌 인근 외국인 유학생</div>
               </div>
-              <div style="background:rgba(74,143,92,.08);border:1px solid rgba(74,143,92,.2);border-radius:12px;padding:4% 5%;text-align:center;">
-                <div class="stat-val c-green" style="font-size:clamp(28px,4vw,52px);">800<span class="stat-unit">명+</span></div>
-                <div class="stat-label c-gray" style="margin-top:6px;">무슬림 유학생 (추산)</div>
+              <div style="background:rgba(74,143,92,.08);border:1px solid rgba(74,143,92,.2);border-radius:12px;padding:2% 5%;text-align:center;">
+                <div class="stat-val c-green" style="font-size:clamp(24px,3.5vw,48px);">800<span class="stat-unit">명+</span></div>
+                <div class="stat-label c-gray" style="margin-top:4px;">무슬림 유학생 (추산)</div>
               </div>
-              <div style="background:#f8f8f6;border:1px solid #e8e8e4;border-radius:12px;padding:4% 5%;text-align:center;">
-                <div class="stat-val" style="font-size:clamp(28px,4vw,52px);color:#d04040;">5<span class="stat-unit" style="font-size:.4em;">개</span></div>
-                <div class="stat-label c-gray" style="margin-top:6px;">신촌 내 비건·할랄 카페 (경쟁 부재)</div>
+              <div style="background:#f8f8f6;border:1px solid #e8e8e4;border-radius:12px;padding:2% 5%;text-align:center;">
+                <div class="stat-val" style="font-size:clamp(24px,3.5vw,48px);color:#d04040;">5<span class="stat-unit" style="font-size:.4em;">개</span></div>
+                <div class="stat-label c-gray" style="margin-top:4px;">신촌 내 비건·할랄 카페 (경쟁 부재)</div>
               </div>
             </div>
             <!-- Pain Point 3개 -->
-            <div style="display:flex;flex-direction:column;gap:10px;flex:1;">
-              <div class="caption c-gray" style="margin-bottom:2%;">🔍 시장 공백 — Pain Point</div>
-              <div style="display:flex;align-items:flex-start;gap:12px;background:#f8f8f6;border:1px solid #e8e8e4;border-radius:10px;padding:4% 5%;flex:1;">
-                <span style="font-size:clamp(20px,2.5vw,30px);">🕌</span>
+            <div style="display:flex;flex-direction:column;gap:6px;flex:1;">
+              <div class="caption c-gray" style="margin-bottom:.5%;">🔍 시장 공백 — Pain Point</div>
+              <div style="display:flex;align-items:center;gap:12px;background:#f8f8f6;border:1px solid #e8e8e4;border-radius:10px;padding:2% 5%;flex:1;">
+                <span style="font-size:clamp(18px,2.2vw,28px);flex-shrink:0;">🕌</span>
                 <div>
-                  <div style="font-size:clamp(14px,1.5vw,19px);font-weight:800;color:#222;margin-bottom:.3em;">할랄 카페 신촌 전무</div>
+                  <div style="font-size:clamp(13px,1.4vw,18px);font-weight:800;color:#222;margin-bottom:.2em;">할랄 카페 신촌 전무</div>
                   <div class="body c-gray">이슬람권 학생, 강남·이태원까지 원정 이동 중 — 신촌·연세대 상권 내 할랄 인증 카페 0곳</div>
                 </div>
               </div>
-              <div style="display:flex;align-items:flex-start;gap:12px;background:#f8f8f6;border:1px solid #e8e8e4;border-radius:10px;padding:4% 5%;flex:1;">
-                <span style="font-size:clamp(20px,2.5vw,30px);">🌿</span>
+              <div style="display:flex;align-items:center;gap:12px;background:#f8f8f6;border:1px solid #e8e8e4;border-radius:10px;padding:2% 5%;flex:1;">
+                <span style="font-size:clamp(18px,2.2vw,28px);flex-shrink:0;">🌿</span>
                 <div>
-                  <div style="font-size:clamp(14px,1.5vw,19px);font-weight:800;color:#222;margin-bottom:.3em;">비건 전문 공간 부족</div>
+                  <div style="font-size:clamp(13px,1.4vw,18px);font-weight:800;color:#222;margin-bottom:.2em;">비건 전문 공간 부족</div>
                   <div class="body c-gray">수요 급증 대비 신촌 내 공급 극히 부족 — 비건 메뉴 전문 카페 전무</div>
                 </div>
               </div>
-              <div style="display:flex;align-items:flex-start;gap:12px;background:#f8f8f6;border:1px solid #e8e8e4;border-radius:10px;padding:4% 5%;flex:1;">
-                <span style="font-size:clamp(20px,2.5vw,30px);">💬</span>
+              <div style="display:flex;align-items:center;gap:12px;background:#f8f8f6;border:1px solid #e8e8e4;border-radius:10px;padding:2% 5%;flex:1;">
+                <span style="font-size:clamp(18px,2.2vw,28px);flex-shrink:0;">💬</span>
                 <div>
-                  <div style="font-size:clamp(14px,1.5vw,19px);font-weight:800;color:#222;margin-bottom:.3em;">내·외국인 교류 플랫폼 전무</div>
+                  <div style="font-size:clamp(13px,1.4vw,18px);font-weight:800;color:#222;margin-bottom:.2em;">내·외국인 교류 플랫폼 부족</div>
                   <div class="body c-gray">언어교환 정기 모임 운영 공간 없음 — 커뮤니티 수요 대비 공급 공백</div>
                 </div>
               </div>
@@ -1129,36 +1235,36 @@ html, body {
         <!-- ⑤-b 가격 전략 -->
         <div class="slide" id="s5b" data-title="가격 전략">
           <div style="flex:1;display:flex;flex-direction:column;padding:calc(5vw - 12px) 6% 5%;">
-            <div class="eyebrow c-green">05 · Market</div>
+            <div class="eyebrow c-green">04 · Market</div>
             <div class="heading c-white" style="margin-bottom:4%;">가격 전략</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:3%;flex:1;">
               <!-- 가격표 -->
               <div style="background:#f8f8f6;border:1px solid #e8e8e4;border-radius:12px;padding:6% 7%;">
                 <div class="caption c-gray" style="margin-bottom:6%;">💰 메뉴 가격표</div>
-                <table style="width:100%;border-collapse:collapse;">
+                <table style="width:100%;border-collapse:collapse;height:100%;">
                   <tr style="border-bottom:1px solid #e8e8e4;">
-                    <td style="font-size:clamp(12px,1.2vw,15px);color:#555;padding:7px 0;font-weight:600;">☕ 아메리카노 · 드립커피</td>
-                    <td style="font-size:clamp(12px,1.2vw,15px);color:var(--green);font-weight:700;text-align:right;">4,500 ~ 5,500원</td>
+                    <td style="font-size:clamp(14px,1.5vw,18px);color:#555;padding:clamp(11px,1.6vw,20px) 0;font-weight:600;">☕ 아메리카노 · 드립커피</td>
+                    <td style="font-size:clamp(14px,1.5vw,18px);color:var(--green);font-weight:700;text-align:right;">4,500 ~ 5,500원</td>
                   </tr>
                   <tr style="border-bottom:1px solid #e8e8e4;">
-                    <td style="font-size:clamp(12px,1.2vw,15px);color:#555;padding:7px 0;font-weight:600;">🥛 식물성 밀크 라떼</td>
-                    <td style="font-size:clamp(12px,1.2vw,15px);color:var(--green);font-weight:700;text-align:right;">5,500 ~ 7,000원</td>
+                    <td style="font-size:clamp(14px,1.5vw,18px);color:#555;padding:clamp(11px,1.6vw,20px) 0;font-weight:600;">🥛 식물성 밀크 라떼</td>
+                    <td style="font-size:clamp(14px,1.5vw,18px);color:var(--green);font-weight:700;text-align:right;">5,500 ~ 7,000원</td>
                   </tr>
                   <tr style="border-bottom:1px solid #e8e8e4;">
-                    <td style="font-size:clamp(12px,1.2vw,15px);color:#555;padding:7px 0;font-weight:600;">🌙 할랄 인증 음료·티</td>
-                    <td style="font-size:clamp(12px,1.2vw,15px);color:var(--green);font-weight:700;text-align:right;">5,000 ~ 6,500원</td>
+                    <td style="font-size:clamp(14px,1.5vw,18px);color:#555;padding:clamp(11px,1.6vw,20px) 0;font-weight:600;">🍽️ 할랄 푸드</td>
+                    <td style="font-size:clamp(14px,1.5vw,18px);color:var(--green);font-weight:700;text-align:right;">5,000 ~ 6,500원</td>
                   </tr>
                   <tr style="border-bottom:1px solid #e8e8e4;">
-                    <td style="font-size:clamp(12px,1.2vw,15px);color:#555;padding:7px 0;font-weight:600;">🍪 비건 디저트·스낵</td>
-                    <td style="font-size:clamp(12px,1.2vw,15px);color:var(--green);font-weight:700;text-align:right;">3,500 ~ 5,500원</td>
+                    <td style="font-size:clamp(14px,1.5vw,18px);color:#555;padding:clamp(11px,1.6vw,20px) 0;font-weight:600;">🌱 비건 푸드</td>
+                    <td style="font-size:clamp(14px,1.5vw,18px);color:var(--green);font-weight:700;text-align:right;">3,500 ~ 5,500원</td>
                   </tr>
                   <tr style="border-bottom:1px solid #e8e8e4;">
-                    <td style="font-size:clamp(12px,1.2vw,15px);color:#555;padding:7px 0;font-weight:600;">💬 언어교환 참가비</td>
-                    <td style="font-size:clamp(12px,1.2vw,15px);color:var(--green);font-weight:700;text-align:right;">10,000원 / 회</td>
+                    <td style="font-size:clamp(14px,1.5vw,18px);color:#555;padding:clamp(11px,1.6vw,20px) 0;font-weight:600;">💬 언어교환 참가비</td>
+                    <td style="font-size:clamp(14px,1.5vw,18px);color:var(--green);font-weight:700;text-align:right;">10,000원 / 회</td>
                   </tr>
                   <tr>
-                    <td style="font-size:clamp(12px,1.2vw,15px);color:#555;padding:7px 0;font-weight:600;">🏠 소모임 공간 대관</td>
-                    <td style="font-size:clamp(12px,1.2vw,15px);color:var(--green);font-weight:700;text-align:right;">20,000원 / 시간</td>
+                    <td style="font-size:clamp(14px,1.5vw,18px);color:#555;padding:clamp(11px,1.6vw,20px) 0;font-weight:600;">🏠 소모임 공간 대관</td>
+                    <td style="font-size:clamp(14px,1.5vw,18px);color:var(--green);font-weight:700;text-align:right;">20,000원 / 시간</td>
                   </tr>
                 </table>
               </div>
@@ -1189,7 +1295,7 @@ html, body {
         <!-- ⑥ DIFFERENTIATION -->
         <div class="slide" id="s6" data-title="아이템 경쟁력">
           <div class="diff-left">
-            <div class="eyebrow c-green">06 · Competitive Edge</div>
+            <div class="eyebrow c-green">05 · Competitive Edge</div>
             <div class="heading c-white">아이템 차별성 &amp; 경쟁력</div>
             <div class="comp-wrap">
               <table class="comp-table">
@@ -1230,6 +1336,29 @@ html, body {
                   <td class="bro">✓</td>
                 </tr>
               </table>
+              <div style="display:flex;gap:1em;margin-top:5%;">
+                <div style="flex:1;background:rgba(74,143,92,.08);border:1px solid rgba(74,143,92,.2);border-radius:10px;padding:4% 5%;display:flex;align-items:flex-start;gap:.6em;">
+                  <span style="font-size:clamp(14px,1.4vw,20px);">🏆</span>
+                  <div>
+                    <div style="font-weight:700;color:var(--green);font-size:clamp(9px,.9vw,13px);line-height:1.3;">국내 최초 수준</div>
+                    <div style="font-size:clamp(8px,.75vw,11px);color:#666;margin-top:.3em;line-height:1.4;">외국인·무슬림 친화<br>언어교환 카페</div>
+                  </div>
+                </div>
+                <div style="flex:1;background:rgba(74,143,92,.08);border:1px solid rgba(74,143,92,.2);border-radius:10px;padding:4% 5%;display:flex;align-items:flex-start;gap:.6em;">
+                  <span style="font-size:clamp(14px,1.4vw,20px);">🔄</span>
+                  <div>
+                    <div style="font-weight:700;color:var(--green);font-size:clamp(9px,.9vw,13px);line-height:1.3;">강력한 재방문 동기</div>
+                    <div style="font-size:clamp(8px,.75vw,11px);color:#666;margin-top:.3em;line-height:1.4;">언어교환 정기 모임<br>고정 고객 형성</div>
+                  </div>
+                </div>
+                <div style="flex:1;background:rgba(74,143,92,.08);border:1px solid rgba(74,143,92,.2);border-radius:10px;padding:4% 5%;display:flex;align-items:flex-start;gap:.6em;">
+                  <span style="font-size:clamp(14px,1.4vw,20px);">📢</span>
+                  <div>
+                    <div style="font-weight:700;color:var(--green);font-size:clamp(9px,.9vw,13px);line-height:1.3;">커뮤니티 구전 효과</div>
+                    <div style="font-size:clamp(8px,.75vw,11px);color:#666;margin-top:.3em;line-height:1.4;">무슬림 네트워크 내<br>자연 확산</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="diff-right">
@@ -1262,17 +1391,17 @@ html, body {
         <!-- ⑦ OPERATIONS -->
         <div class="slide" id="s7" data-title="운영계획">
           <div style="flex:1;display:flex;flex-direction:column;padding:calc(5vw - 12px) 6% 5%;">
-            <div class="eyebrow c-green">07 · Operations</div>
+            <div class="eyebrow c-green">06 · Operations</div>
             <div class="heading c-white">점포 운영계획</div>
             <div class="ops-grid">
               <div class="ops-card">
                 <div class="ops-title"><span>🕐</span> 운영 시간</div>
                 <div class="ops-item"><strong>평일</strong> &nbsp;10:00 ~ 22:00</div>
-                <div class="ops-item"><strong>주말</strong> &nbsp;11:00 ~ 22:00</div>
+                <div class="ops-item"><strong>주말</strong> &nbsp;10:00 ~ 22:00</div>
                 <div class="ops-item" style="color:#555;margin-top:.5em;">정기 휴무 없음 · 명절 단축</div>
                 <div style="height:1px;background:rgba(0,0,0,.05);margin:6% 0;"></div>
                 <div class="ops-title"><span>💬</span> 언어교환 모임</div>
-                <div class="ops-item">평일 &nbsp;<strong>19:00 ~ 21:00</strong></div>
+                <div class="ops-item">평일 &nbsp;<strong>19:30 ~ 21:30</strong></div>
                 <div class="ops-item">주말 &nbsp;<strong>15:00 ~ 17:00</strong></div>
                 <div class="ops-item" style="color:#555;">주 2~3회 · 회당 10~20명</div>
               </div>
@@ -1305,81 +1434,80 @@ html, body {
           </div>
         </div>
 
-        <!-- ⑧ SPACE — 전용 공간 -->
-        <div class="slide" id="s8" data-title="전용 공간 활용">
-          <div style="flex:1;display:flex;flex-direction:column;padding:calc(5vw - 12px) 6% 5%;">
-            <div class="eyebrow c-green">09 · Space</div>
-            <div class="heading c-white">전용 공간 활용</div>
-            <div style="flex:1;display:flex;gap:3%;margin-top:3%;">
-              <!-- 면적 표시 -->
-              <div style="width:220px;flex-shrink:0;background:rgba(74,143,92,.06);border:1px solid rgba(74,143,92,.18);border-radius:12px;padding:5% 6%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
-                <span class="zone-tag zt-green" style="margin-bottom:12px;">전용 공간</span>
-                <div class="zone-sqm c-green" style="font-size:clamp(36px,5vw,64px);font-weight:900;line-height:1;">59.45</div>
-                <div class="zone-unit" style="color:#888;font-size:clamp(14px,1.5vw,18px);">㎡</div>
-              </div>
-              <!-- 공간 구성 -->
-              <div style="flex:1;display:flex;flex-direction:column;gap:3%;">
-                <div class="room-grid" style="margin-bottom:0;">
-                  <div class="room-tile"><span class="rt-icon">☕</span>메인 홀<br><span style="color:#555;font-size:.85em;">카페 좌석</span></div>
-                  <div class="room-tile"><span class="rt-icon">💬</span>소모임 존<br><span style="color:#555;font-size:.85em;">이동식 가구</span></div>
-                  <div class="room-tile"><span class="rt-icon">🕌</span>기도실<br><span style="color:#555;font-size:.85em;">키블라 · 칸막이</span></div>
-                  <div class="room-tile"><span class="rt-icon">🪟</span>카운터<br><span style="color:#555;font-size:.85em;">다국어 메뉴판</span></div>
-                </div>
-                <div style="background:rgba(74,143,92,.05);border:1px solid rgba(74,143,92,.15);border-radius:8px;padding:4% 5%;">
-                  <div class="body c-gray">소모임 존은 이동식 가구로 <strong style="color:#111;">2~4인 소그룹</strong>부터 <strong style="color:#111;">20인 이벤트</strong>까지 유연하게 전환 가능</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <!-- ⑧-b 루프탑 테라스 -->
         <div class="slide" id="s8b" data-title="루프탑 테라스">
           <div style="flex:1;display:flex;flex-direction:column;padding:calc(5vw - 12px) 6% 5%;">
-            <div class="eyebrow c-green">10 · Space</div>
+            <div class="eyebrow c-green">07 · Space</div>
             <div class="heading c-white">루프탑 테라스 활용</div>
-            <div style="flex:1;display:flex;gap:3%;margin-top:3%;">
-              <!-- 면적 표시 -->
-              <div style="width:220px;flex-shrink:0;background:rgba(139,92,246,.05);border:1px solid rgba(139,92,246,.2);border-radius:12px;padding:5% 6%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
-                <span class="zone-tag zt-purple" style="margin-bottom:12px;">루프탑 테라스</span>
-                <div class="zone-sqm c-purple" style="font-size:clamp(36px,5vw,64px);font-weight:900;line-height:1;">74.58</div>
-                <div class="zone-unit" style="color:#888;font-size:clamp(14px,1.5vw,18px);">㎡</div>
+            <div style="color:#666;font-size:clamp(11px,1.1vw,14px);margin-top:.4em;margin-bottom:3%;">신촌 대학가 전망 · 다목적 야외 공간으로 브랜드 경험을 확장합니다</div>
+            <div style="flex:1;display:flex;gap:3%;">
+              <!-- 이미지 -->
+              <div style="width:40%;flex-shrink:0;border-radius:14px;overflow:hidden;position:relative;">
+                <img src="ai_language.png" alt="루프탑 테라스 활용 예시" style="width:100%;height:100%;object-fit:cover;display:block;">
+                <div style="position:absolute;bottom:0;left:0;right:0;padding:8% 8% 5%;background:linear-gradient(to top,rgba(0,0,0,.55) 0%,transparent 100%);">
+                  <div style="color:#fff;font-size:clamp(9px,.9vw,12px);font-weight:600;letter-spacing:.03em;">루프탑 언어교환 이벤트 예시</div>
+                </div>
               </div>
-              <!-- 활용 아이디어 -->
-              <div style="flex:1;">
-                <div class="roof-ideas">
-                  <div class="idea-row"><span class="idea-icon">☀️</span><div><strong style="color:#111;font-size:clamp(13px,1.3vw,16px);">계절 야외 언어교환 모임</strong><div class="small c-gray">봄·여름·가을 루프탑 이벤트 · 개방형 테라스 활용</div></div></div>
-                  <div class="idea-row"><span class="idea-icon">📸</span><div><strong style="color:#111;font-size:clamp(13px,1.3vw,16px);">인스타그램 포토존</strong><div class="small c-gray">다국어 포토프레임 · SNS 바이럴 마케팅</div></div></div>
-                  <div class="idea-row"><span class="idea-icon">🎪</span><div><strong style="color:#111;font-size:clamp(13px,1.3vw,16px);">할랄·비건 팝업 마켓</strong><div class="small c-gray">분기 1회 개최 · 외부 협력 브랜드 입점</div></div></div>
-                  <div class="idea-row"><span class="idea-icon">🌙</span><div><strong style="color:#111;font-size:clamp(13px,1.3vw,16px);">야경 이벤트</strong><div class="small c-gray">저녁 외부 조명 · 분위기 연출</div></div></div>
-                  <div class="idea-row"><span class="idea-icon">🏷</span><div><strong style="color:#111;font-size:clamp(13px,1.3vw,16px);">루프탑 대관 서비스</strong><div class="small c-gray">소모임·스터디그룹 · 30,000원/회</div></div></div>
+              <!-- 아이디어 카드 그리드 -->
+              <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr 1fr;gap:10px;">
+                <div style="background:#f8f8f6;border:1px solid #e8e8e4;border-radius:10px;padding:4% 5%;display:flex;gap:.7em;align-items:center;">
+                  <div style="width:clamp(28px,2.5vw,36px);height:clamp(28px,2.5vw,36px);border-radius:50%;background:rgba(251,191,36,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:clamp(13px,1.2vw,16px);">☀️</div>
+                  <div>
+                    <div style="font-weight:700;font-size:clamp(14px,1.4vw,18px);color:#111;line-height:1.3;">계절 야외 언어교환 모임</div>
+                    <div style="font-size:clamp(12px,1.15vw,15px);color:#888;margin-top:.3em;line-height:1.5;">봄·여름·가을 루프탑 이벤트<br>개방형 테라스 활용</div>
+                  </div>
+                </div>
+                <div style="background:#f8f8f6;border:1px solid #e8e8e4;border-radius:10px;padding:4% 5%;display:flex;gap:.7em;align-items:center;">
+                  <div style="width:clamp(28px,2.5vw,36px);height:clamp(28px,2.5vw,36px);border-radius:50%;background:rgba(236,72,153,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:clamp(13px,1.2vw,16px);">📸</div>
+                  <div>
+                    <div style="font-weight:700;font-size:clamp(14px,1.4vw,18px);color:#111;line-height:1.3;">인스타그램 포토존</div>
+                    <div style="font-size:clamp(12px,1.15vw,15px);color:#888;margin-top:.3em;line-height:1.5;">다국어 포토프레임<br>SNS 바이럴 마케팅</div>
+                  </div>
+                </div>
+                <div style="background:#f8f8f6;border:1px solid #e8e8e4;border-radius:10px;padding:4% 5%;display:flex;gap:.7em;align-items:center;">
+                  <div style="width:clamp(28px,2.5vw,36px);height:clamp(28px,2.5vw,36px);border-radius:50%;background:rgba(74,143,92,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:clamp(13px,1.2vw,16px);">🎪</div>
+                  <div>
+                    <div style="font-weight:700;font-size:clamp(14px,1.4vw,18px);color:#111;line-height:1.3;">할랄·비건 팝업 마켓</div>
+                    <div style="font-size:clamp(12px,1.15vw,15px);color:#888;margin-top:.3em;line-height:1.5;">분기 1회 개최<br>외부 협력 브랜드 입점</div>
+                  </div>
+                </div>
+                <div style="background:#f8f8f6;border:1px solid #e8e8e4;border-radius:10px;padding:4% 5%;display:flex;gap:.7em;align-items:center;">
+                  <div style="width:clamp(28px,2.5vw,36px);height:clamp(28px,2.5vw,36px);border-radius:50%;background:rgba(99,102,241,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:clamp(13px,1.2vw,16px);">🌙</div>
+                  <div>
+                    <div style="font-weight:700;font-size:clamp(14px,1.4vw,18px);color:#111;line-height:1.3;">야경 이벤트</div>
+                    <div style="font-size:clamp(12px,1.15vw,15px);color:#888;margin-top:.3em;line-height:1.5;">저녁 외부 조명<br>분위기 연출</div>
+                  </div>
+                </div>
+                <div style="background:rgba(74,143,92,.06);border:1px solid rgba(74,143,92,.2);border-radius:10px;padding:4% 5%;display:flex;gap:.7em;align-items:center;grid-column:span 2;">
+                  <div style="width:clamp(28px,2.5vw,36px);height:clamp(28px,2.5vw,36px);border-radius:50%;background:rgba(74,143,92,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:clamp(13px,1.2vw,16px);">🏷</div>
+                  <div>
+                    <div style="font-weight:700;font-size:clamp(14px,1.4vw,18px);color:var(--green);line-height:1.3;">루프탑 대관 서비스 <span style="font-size:.85em;font-weight:500;color:#999;">— 추가 수익원</span></div>
+                    <div style="font-size:clamp(12px,1.15vw,15px);color:#888;margin-top:.3em;line-height:1.5;">소모임·스터디그룹 · 50,000원/회 · 월 10회 운영 시 <strong style="color:var(--green);">+50만원</strong> 수익 기여</div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- ⑨ BUDGET -->
-        <div class="slide" id="s9" data-title="예산 & 자금 조달">
-          <div class="budget-left">
-            <div class="eyebrow c-green">11 · Finance</div>
-            <div class="heading c-white">예산 &amp; 자금 조달</div>
-            <div class="total-box" style="margin-top:6%;">
-              <div class="caption c-gray" style="margin-bottom:4%;">초기 창업비용 (합계)</div>
-              <div class="stat-val c-green">2,000<span class="stat-unit">만원</span></div>
-              <div class="stat-label c-gray" style="margin-top:4%;">100% 자기자금 · 무차입 창업</div>
+        <!-- ⑨ BUDGET + REVENUE (합본) -->
+        <div class="slide" id="s9" data-title="예산 & 수익 분석">
+          <div class="budget-left" style="flex:1.05;">
+            <div class="eyebrow c-green">08 · Finance</div>
+            <div class="heading c-white" style="margin-bottom:4%;">예산 &amp; 자금 조달</div>
+            <!-- 창업비용 요약 -->
+            <div style="display:flex;align-items:center;gap:5%;background:rgba(74,143,92,.06);border:1px solid rgba(74,143,92,.15);border-radius:10px;padding:4% 5%;margin-bottom:4%;">
+              <div>
+                <div class="caption c-gray" style="margin-bottom:2%;">초기 창업비용</div>
+                <div class="stat-val c-green" style="font-size:clamp(22px,2.8vw,36px);">2,000<span class="stat-unit">만원</span></div>
+              </div>
+              <div style="width:1px;background:rgba(74,143,92,.2);align-self:stretch;"></div>
+              <div style="font-size:clamp(12px,1.2vw,15px);color:#666;line-height:1.8;">
+                100% 자기자금 · 무차입 창업<br><strong style="color:var(--green);">자기자금(저축) 2,000만원</strong>
+              </div>
             </div>
-            <div style="background:rgba(0,0,0,.03);border:1px solid rgba(0,0,0,.07);border-radius:10px;padding:5% 6%;">
-              <div class="caption c-gray" style="margin-bottom:5%;">수입 — 자금조달</div>
-              <table class="ptable">
-                <tr><th>항목</th><th style="text-align:right;">금액(만원)</th></tr>
-                <tr><td>자기자금 (저축)</td><td class="num">2,000</td></tr>
-                <tr><td class="total" style="font-weight:800;">합 계</td><td class="num total">2,000</td></tr>
-              </table>
-            </div>
-          </div>
-          <div class="budget-right">
-            <div class="caption c-gray" style="margin-bottom:5%;">지출 — 사업예산</div>
+            <!-- 지출 테이블 -->
+            <div class="caption c-gray" style="margin-bottom:3%;">지출 — 사업예산</div>
             <table class="ptable">
               <tr><th>항목</th><th style="text-align:right;">금액(만원)</th><th style="text-align:right;">비중</th></tr>
               <tr><td>인테리어 공사</td><td class="num">700</td><td class="num c-gray" style="font-weight:400;">35%</td></tr>
@@ -1391,42 +1519,29 @@ html, body {
               <tr><td>홍보비</td><td class="num">100</td><td class="num c-gray" style="font-weight:400;">5%</td></tr>
               <tr><td class="total" style="font-weight:800;">합 계</td><td class="num total">2,000</td><td></td></tr>
             </table>
-            <div style="margin-top:5%;">
-              <div class="caption c-gray" style="margin-bottom:4%;">예산 비중</div>
-              <div class="bar-row"><span class="bar-label">인테리어</span><div class="bar-track"><div class="bar-fill" style="width:35%;background:var(--green);"></div></div><span class="bar-pct c-green">35%</span></div>
-              <div class="bar-row"><span class="bar-label">인건비</span><div class="bar-track"><div class="bar-fill" style="width:20%;background:#7c3aed;"></div></div><span class="bar-pct c-purple">20%</span></div>
-              <div class="bar-row"><span class="bar-label">장비구입</span><div class="bar-track"><div class="bar-fill" style="width:15%;background:var(--gold);"></div></div><span class="bar-pct c-gold">15%</span></div>
-              <div class="bar-row"><span class="bar-label">재료·예비</span><div class="bar-track"><div class="bar-fill" style="width:20%;background:#3b82f6;"></div></div><span class="bar-pct" style="color:#3b82f6;">20%</span></div>
-              <div class="bar-row"><span class="bar-label">기타</span><div class="bar-track"><div class="bar-fill" style="width:10%;background:#555;"></div></div><span class="bar-pct c-gray">10%</span></div>
-            </div>
           </div>
-        </div>
-
-        <!-- ⑩ REVENUE -->
-        <div class="slide" id="s10" data-title="수익 분석">
-          <div style="flex:1;display:flex;flex-direction:column;padding:calc(5vw - 12px) 6% 5%;">
-            <div class="eyebrow c-green">12 · Revenue</div>
-            <div class="heading c-white">수익 분석</div>
-            <div class="rev-grid">
-              <div class="rev-stat main">
-                <div class="caption c-green" style="margin-bottom:6%;">월 예상 매출</div>
-                <div class="stat-val c-green">1,029<span class="stat-unit">만원</span></div>
-                <div class="stat-label c-gray" style="margin-top:5%;">음료·식품 900 + 프로그램 105 + 대관 24</div>
+          <div class="budget-right" style="flex:.95;display:flex;flex-direction:column;">
+            <div class="eyebrow c-green" style="margin-bottom:4%;">수익 분석</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:10px;flex:1;">
+              <div class="rev-stat main" style="margin:0;">
+                <div class="caption c-green" style="margin-bottom:4%;">월 예상 매출</div>
+                <div class="stat-val c-green" style="font-size:clamp(20px,2.6vw,34px);">1,029<span class="stat-unit">만원</span></div>
+                <div class="stat-label c-gray" style="margin-top:4%;font-size:clamp(9px,.82vw,11px);">음료·식품 900 + 프로그램 105 + 대관 24</div>
               </div>
-              <div class="rev-stat">
-                <div class="caption c-gray" style="margin-bottom:6%;">월 고정비</div>
-                <div class="stat-val" style="color:#ef4444;">550<span class="stat-unit">만원</span></div>
-                <div class="stat-label c-gray" style="margin-top:5%;">재료비 270 + 인건비 150 + 관리비 50 + 기타 80</div>
+              <div class="rev-stat" style="margin:0;">
+                <div class="caption c-gray" style="margin-bottom:4%;">월 고정비</div>
+                <div class="stat-val" style="color:#ef4444;font-size:clamp(20px,2.6vw,34px);">550<span class="stat-unit">만원</span></div>
+                <div class="stat-label c-gray" style="margin-top:4%;font-size:clamp(9px,.82vw,11px);">재료비 270 + 인건비 150 + 관리비 50 + 기타 80</div>
               </div>
-              <div class="rev-stat" style="border-color:rgba(74,143,92,.3);background:rgba(74,143,92,.06);">
-                <div class="caption c-green" style="margin-bottom:6%;">월 순이익</div>
-                <div class="stat-val c-green">479<span class="stat-unit">만원</span></div>
-                <div class="stat-label c-gray" style="margin-top:5%;">수익률 약 <strong style="color:var(--green);">46.5%</strong></div>
+              <div class="rev-stat" style="margin:0;border-color:rgba(74,143,92,.3);background:rgba(74,143,92,.06);">
+                <div class="caption c-green" style="margin-bottom:4%;">월 순이익</div>
+                <div class="stat-val c-green" style="font-size:clamp(20px,2.6vw,34px);">479<span class="stat-unit">만원</span></div>
+                <div class="stat-label c-gray" style="margin-top:4%;">수익률 약 <strong style="color:var(--green);">46.5%</strong></div>
               </div>
-              <div class="rev-stat" style="border-color:rgba(245,197,24,.2);background:rgba(245,197,24,.05);">
-                <div class="caption c-gold" style="margin-bottom:6%;">손익분기점</div>
-                <div class="stat-val c-gold" style="font-size:clamp(20px,3vw,38px);">일 30잔+</div>
-                <div class="stat-label c-gray" style="margin-top:5%;">월 매출 550만원 달성 시<br>초기 3개월 내 목표</div>
+              <div class="rev-stat" style="margin:0;border-color:rgba(245,197,24,.2);background:rgba(245,197,24,.05);">
+                <div class="caption c-gold" style="margin-bottom:4%;">손익분기점</div>
+                <div class="stat-val c-gold" style="font-size:clamp(18px,2.2vw,30px);">일 30잔+</div>
+                <div class="stat-label c-gray" style="margin-top:4%;font-size:clamp(9px,.82vw,11px);">월 매출 550만원 달성 시<br>초기 3개월 내 목표</div>
               </div>
             </div>
           </div>
@@ -1434,8 +1549,8 @@ html, body {
 
         <!-- ⑪ MARKETING -->
         <div class="slide" id="s11" data-title="홍보·마케팅">
-          <div style="flex:1;display:flex;flex-direction:column;padding:calc(5vw - 12px) 6% 5%;">
-            <div class="eyebrow c-green">13 · Marketing</div>
+          <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-start;padding:calc(5vw - 12px) 6% 5%;">
+            <div class="eyebrow c-green">09 · Marketing</div>
             <div class="heading c-white">홍보 &amp; 판매 전략</div>
             <div class="mkt-grid">
               <div class="mkt-card">
@@ -1453,7 +1568,7 @@ html, body {
                 <div class="mkt-title">대학 연계</div>
                 <ul class="mkt-items">
                   <li>연세대·이화여대·서강대 국제처 협력</li>
-                  <li>신입 유학생 오리엔테이션 홍보 참가</li>
+                  <li>에브리타임을 이용한 적극 홍보</li>
                   <li>학생증 제시 할인 프로그램</li>
                   <li>학생회·동아리 모임 공간 제공</li>
                 </ul>
@@ -1485,7 +1600,7 @@ html, body {
         <!-- ⑫ CSR + GROWTH -->
         <div class="slide" id="s12" data-title="지역공헌 · 성장전략">
           <div class="csr-left">
-            <div class="eyebrow c-green">14 · Community</div>
+            <div class="eyebrow c-green">10 · Community</div>
             <div class="heading c-white">지역사회 공헌</div>
             <div class="csr-items">
               <div class="csr-item">
@@ -1606,6 +1721,14 @@ function toggleFull() {
 
 // 전체화면 버튼 텍스트
 document.querySelector('.tb-btn.primary').addEventListener('click', toggleFull);
+
+// PDF 저장
+function printPDF() {
+  document.body.classList.add('printing');
+  window.print();
+  document.body.classList.remove('printing');
+}
+
 show(0);
 </script>
 </body>
