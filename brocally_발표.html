@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>brocally — 신촌 청년푸드스토어</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --green:  #4A8F5C;
+  --green-light: #5BAD72;
+  --dark:   #111111;
+  --dark2:  #1a1a1a;
+  --dark3:  #242424;
+  --white:  #ffffff;
+  --off:    #f5f5f0;
+  --gray:   #888888;
+  --gray2:  #555555;
+  --gold:   #f5c518;
+  --purple: #8b5cf6;
+  --red:    #ef4444;
+  --sand:   #f0ebe1;
+  --ink:    #1a1a1a;
+}
+
+html, body {
+  width: 100%; height: 100%;
+  font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+  background: #e8e8e4;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* ═══════════════════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════════════════ */
+#app {
+  display: flex;
+  width: 100vw; height: 100vh;
+}
+
+/* ── Sidebar ── */
+#sidebar {
+  width: 200px;
+  flex-shrink: 0;
+  background: #f9f9f7;
+  border-right: 1px solid #e0e0dc;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+#sidebar-header {
+  padding: 16px 14px 12px;
+  border-bottom: 1px solid #e0e0dc;
+  flex-shrink: 0;
+}
+#sidebar-logo {
+  font-size: 15px; font-weight: 800;
+  color: var(--green); letter-spacing: -.5px;
+}
+#sidebar-sub {
+  font-size: 10px; color: #aaa; margin-top: 3px;
+  line-height: 1.4;
+}
+#thumbs {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 10px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+#thumbs::-webkit-scrollbar { width: 3px; }
+#thumbs::-webkit-scrollbar-thumb { background: #d8d8d4; border-radius: 2px; }
+
+.thumb {
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color .15s;
+  flex-shrink: 0;
+  position: relative;
+  aspect-ratio: 16/9;
+  background: #e8e8e4;
+  display: flex; align-items: center; justify-content: center;
+}
+.thumb.active { border-color: var(--green); }
+.thumb:hover:not(.active) { border-color: #ccc; }
+.thumb-num {
+  position: absolute; bottom: 4px; right: 6px;
+  font-size: 9px; color: rgba(0,0,0,.25); font-weight: 600;
+}
+.thumb-preview {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  padding: 6px;
+  font-size: 8px; color: #bbb; text-align: center; line-height: 1.4;
+}
+.thumb-preview strong { color: #888; display: block; margin-bottom: 2px; font-size: 9px; }
+
+/* ── Main ── */
+#main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Top bar ── */
+#topbar {
+  height: 44px;
+  background: #f9f9f7;
+  border-bottom: 1px solid #e0e0dc;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 20px;
+  flex-shrink: 0;
+}
+#slide-title-bar {
+  font-size: 12px; color: #999; font-weight: 500;
+}
+#topbar-right {
+  display: flex; align-items: center; gap: 12px;
+}
+.tb-btn {
+  font-size: 11px; color: #777; background: none; border: 1px solid #d8d8d4;
+  border-radius: 6px; padding: 4px 10px; cursor: pointer;
+  font-family: inherit; transition: all .15s;
+}
+.tb-btn:hover { color: #111; border-color: #aaa; }
+.tb-btn.primary {
+  background: var(--green); color: #111; border-color: var(--green);
+  font-weight: 700;
+}
+.tb-btn.primary:hover { background: var(--green-light); }
+
+/* ── Stage ── */
+#stage {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  background: #e8e8e4;
+  overflow: hidden;
+  padding: 24px;
+}
+
+/* ── Slide wrapper ── */
+#slide-wrap {
+  position: relative;
+  aspect-ratio: 16/9;
+  max-width: 100%;
+  max-height: 100%;
+  width: min(100%, calc(100vh * 16/9 - 140px));
+  box-shadow: 0 8px 40px rgba(0,0,0,.15), 0 2px 8px rgba(0,0,0,.08);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* ── Bottom bar ── */
+#bottombar {
+  height: 40px;
+  background: #f9f9f7;
+  border-top: 1px solid #e0e0dc;
+  display: flex; align-items: center; justify-content: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+.nav-btn {
+  background: none; border: none; color: #bbb;
+  font-size: 16px; cursor: pointer; padding: 4px 8px;
+  border-radius: 4px; transition: color .15s;
+  font-family: inherit;
+}
+.nav-btn:hover { color: #111; }
+#slide-counter {
+  font-size: 12px; color: #bbb; font-weight: 500;
+  min-width: 60px; text-align: center;
+}
+
+/* ═══════════════════════════════════════════════════
+   SLIDES
+═══════════════════════════════════════════════════ */
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  overflow: hidden;
+  word-break: keep-all;
+}
+.slide.active { display: flex; }
+
+/* ── Typography ── */
+.eyebrow {
+  font-size: clamp(11px, 1.2vw, 14px);
+  font-weight: 700; letter-spacing: .15em; text-transform: uppercase;
+  margin-bottom: .8em;
+}
+.display {
+  font-size: clamp(32px, 5.5vw, 72px);
+  font-weight: 900; line-height: 1.05; letter-spacing: -.03em;
+}
+.heading {
+  font-size: clamp(20px, 3vw, 40px);
+  font-weight: 800; line-height: 1.1; letter-spacing: -.02em;
+}
+.subheading {
+  font-size: clamp(13px, 1.6vw, 20px);
+  font-weight: 600; line-height: 1.3;
+}
+.body {
+  font-size: clamp(13px, 1.4vw, 18px);
+  font-weight: 400; line-height: 1.7;
+}
+.small {
+  font-size: clamp(11px, 1.15vw, 15px);
+  font-weight: 400; line-height: 1.6;
+}
+.caption {
+  font-size: clamp(10px, 1vw, 13px);
+  font-weight: 500; letter-spacing: .05em; text-transform: uppercase;
+}
+
+/* ── Colors ── */
+.c-green  { color: var(--green); }
+.c-white  { color: #111; }
+.c-off    { color: #555; }
+.c-gray   { color: #888; }
+.c-gold   { color: #b8860b; }
+.c-purple { color: var(--purple); }
+.c-ink    { color: var(--ink); }
+
+/* ── Divider ── */
+.rule { width: 32px; height: 2px; border-radius: 1px; margin: 14px 0; }
+.rule-green { background: var(--green); }
+.rule-white { background: rgba(0,0,0,.22); }
+
+/* ── Tag ── */
+.tag {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(74,143,92,.12); color: var(--green);
+  border: 1px solid rgba(74,143,92,.25); border-radius: 20px;
+  padding: 3px 10px; font-size: clamp(9px,.9vw,11px); font-weight: 600;
+}
+
+/* ── Card ── */
+.card {
+  border-radius: 10px;
+  padding: 5% 6%;
+}
+.card-dark { background: rgba(0,0,0,.03); border: 1px solid rgba(0,0,0,.08); }
+.card-light { background: rgba(0,0,0,.04); border: 1px solid rgba(0,0,0,.08); }
+.card-green { background: rgba(74,143,92,.08); border: 1px solid rgba(74,143,92,.2); }
+
+/* ── Stat block ── */
+.stat-val {
+  font-size: clamp(28px, 4.5vw, 58px);
+  font-weight: 900; letter-spacing: -.04em; line-height: 1;
+}
+.stat-unit { font-size: .45em; font-weight: 500; opacity: .7; }
+.stat-label { font-size: clamp(11px,1.1vw,14px); font-weight: 500; margin-top: 5px; }
+
+/* ── Bar chart ── */
+.bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.bar-label { font-size: clamp(11px,1.1vw,14px); color: var(--gray); width: 6em; flex-shrink: 0; text-align: right; }
+.bar-track { flex: 1; height: 6px; background: rgba(0,0,0,.08); border-radius: 3px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 3px; }
+.bar-pct { font-size: clamp(11px,1.1vw,14px); font-weight: 700; width: 3em; flex-shrink: 0; }
+
+/* ── Table ── */
+.ptable { width: 100%; border-collapse: collapse; }
+.ptable th {
+  font-size: clamp(8px,.85vw,11px); font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: #999;
+  padding: 6px 10px; border-bottom: 1px solid rgba(0,0,0,.08);
+  text-align: left;
+}
+.ptable td {
+  font-size: clamp(11px,1.15vw,16px); padding: 7px 10px;
+  border-bottom: 1px solid rgba(0,0,0,.05); color: rgba(0,0,0,.8);
+}
+.ptable tr:last-child td { border-bottom: none; }
+.ptable .num { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+.ptable .total { color: #8a6800; font-weight: 800; }
+
+/* ── Check list ── */
+.check-list { list-style: none; padding: 0; }
+.check-list li {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: clamp(12px, 1.3vw, 17px); color: rgba(0,0,0,.72);
+  line-height: 1.55; margin-bottom: .5em;
+  word-break: keep-all; overflow-wrap: break-word;
+}
+.check-list li::before {
+  content: '✦';
+  color: var(--green); font-size: .7em; margin-top: .3em; flex-shrink: 0;
+}
+
+/* ── Grid ── */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 3%; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3%; }
+
+/* ── Comparison ── */
+.comp-table { width: 100%; }
+.comp-table th, .comp-table td {
+  padding: 6px 10px; text-align: center;
+  font-size: clamp(9px,.9vw,12px);
+  border-bottom: 1px solid rgba(0,0,0,.06);
+}
+.comp-table th { color: #999; font-weight: 700; font-size: clamp(8px,.8vw,11px); }
+.comp-table td:first-child { text-align: left; color: rgba(0,0,0,.65); }
+.comp-table .bro { color: var(--green); font-weight: 700; background: rgba(74,143,92,.08); }
+.comp-table .yes { color: var(--green); }
+.comp-table .no  { color: #bbb; }
+
+/* ── Flow ── */
+.flow { display: flex; align-items: center; gap: 0; }
+.flow-node {
+  flex: 1; background: rgba(0,0,0,.04); border: 1px solid rgba(0,0,0,.08);
+  border-radius: 8px; padding: 3% 2%; text-align: center;
+  font-size: clamp(9px,.95vw,12px); color: #333;
+}
+.flow-node .icon { font-size: clamp(18px, 2.5vw, 30px); display: block; margin-bottom: .4em; }
+.flow-arrow { color: #ccc; font-size: clamp(12px, 1.5vw, 18px); padding: 0 8px; flex-shrink: 0; }
+
+/* ── Progress ring (CSS only) ── */
+.ring-wrap { position: relative; display: inline-flex; align-items: center; justify-content: center; }
+.ring-label { position: absolute; text-align: center; }
+
+/* ── Pill list ── */
+.pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(0,0,0,.05); border: 1px solid rgba(0,0,0,.1);
+  border-radius: 20px; padding: 4px 12px;
+  font-size: clamp(9px,.9vw,12px); color: rgba(0,0,0,.6); font-weight: 500;
+}
+
+/* ── Timeline ── */
+.timeline { display: flex; gap: 0; position: relative; }
+.tl-item { flex: 1; padding: 0 4%; position: relative; }
+.tl-item::before {
+  content: ''; position: absolute; top: 11px; left: 0; right: 0;
+  height: 2px; background: rgba(0,0,0,.1);
+}
+.tl-item:first-child::before { left: 50%; }
+.tl-item:last-child::before  { right: 50%; }
+.tl-dot {
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 800;
+  position: relative; z-index: 1; margin: 0 auto 12px;
+  border: 2px solid;
+}
+
+/* ═══════════════════════════════════════════════════
+   SLIDE THEMES — 라이트 통일 (Pitch.com style)
+═══════════════════════════════════════════════════ */
+.theme-dark     { background: #fff; color: #111; }
+.theme-forest   { background: #fff; color: #111; }
+.theme-light    { background: #fff; color: #111; }
+.theme-charcoal { background: #fff; color: #111; }
+.theme-navy     { background: #fff; color: #111; }
+.theme-warm     { background: #fff; color: #111; }
+.theme-section  { background: #fff; color: #111; }
+
+/* ═══════════════════════════════════════════════════
+   INDIVIDUAL SLIDES
+═══════════════════════════════════════════════════ */
+
+/* ① COVER */
+#s1 {
+  background: #fff;
+  flex-direction: row;
+  align-items: stretch;
+}
+.cover-left {
+  flex: 1.1;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 8% 7% 8% 8%;
+  position: relative;
+}
+.cover-right {
+  flex: .9;
+  display: flex; align-items: center; justify-content: center;
+  padding: 6%;
+  position: relative;
+}
+.cover-brand {
+  font-size: clamp(56px, 9.5vw, 124px);
+  font-weight: 900; letter-spacing: -.05em;
+  color: var(--green); line-height: 1;
+}
+.cover-sub {
+  font-size: clamp(11px, 1.4vw, 18px);
+  color: rgba(0,0,0,.5); margin-top: .8em; line-height: 1.6;
+  max-width: 90%;
+}
+.cover-meta {
+  margin-top: auto;
+  padding-top: 5%;
+  border-top: 1px solid rgba(0,0,0,.08);
+  font-size: clamp(9px,.9vw,11px);
+  color: rgba(0,0,0,.35);
+}
+.cover-visual {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 3%;
+}
+.big-icon {
+  font-size: clamp(48px, 7vw, 90px);
+  line-height: 1;
+}
+.cover-tags { display: flex; flex-direction: column; gap: 8px; margin-top: 4%; width: 100%; }
+.cover-tag-row {
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(0,0,0,.03);
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 10px; padding: 14px 18px;
+  font-size: clamp(11px,1.15vw,15px); color: rgba(0,0,0,.65);
+}
+.cover-tag-row .icon-sm { font-size: 1.6em; }
+.cover-tag-row [style*="font-weight:700"] { font-size: clamp(13px,1.4vw,18px) !important; }
+.cover-tag-row [style*="font-size:clamp(8px"] { font-size: clamp(11px,1.1vw,14px) !important; }
+.cover-deco {
+  position: absolute; border-radius: 50%;
+  background: radial-gradient(circle, rgba(74,143,92,.15), transparent 70%);
+  pointer-events: none;
+}
+
+/* ② TOC */
+#s2 { background: #fff; flex-direction: column; padding: calc(5vw - 12px) 6% 5%; }
+.toc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2%; flex: 1; margin-top: 4%; }
+.toc-card {
+  background: #f8f8f6; border: 1px solid #e8e8e4;
+  border-radius: 10px; padding: 5% 6%; display: flex; flex-direction: column;
+  transition: background .15s;
+}
+.toc-num { font-size: clamp(22px, 3vw, 38px); font-weight: 900; color: rgba(0,0,0,.08); line-height: 1; margin-bottom: auto; }
+.toc-title { font-size: clamp(12px, 1.3vw, 17px); font-weight: 700; color: rgba(0,0,0,.72); margin-top: 16%; line-height: 1.3; }
+.toc-desc { font-size: clamp(10px,1vw,13px); color: var(--gray); margin-top: .4em; line-height: 1.4; }
+.toc-card.hl { border-color: rgba(74,143,92,.3); background: rgba(74,143,92,.05); }
+.toc-card.hl .toc-num { color: rgba(74,143,92,.2); }
+
+/* ③ ABOUT */
+#s3  { background: #fff; flex-direction: row; align-items: stretch; }
+.about-split { display: flex; flex: 1; min-height: 0; }
+.about-left {
+  width: 36%; background: #f5f5f2;
+  display: flex; flex-direction: column;
+  padding: calc(5vw - 12px) 7% 6%;
+  justify-content: flex-start;
+}
+.about-right {
+  flex: 1;
+  padding: calc(5vw - 12px) 6% 6%;
+  display: flex; flex-direction: column; justify-content: flex-start;
+  overflow: hidden;
+}
+.about-divider {
+  width: 1px;
+  background: #e8e8e4;
+  margin: 3.5% 0;
+  flex-shrink: 0;
+}
+.about-profile {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 1.6vw, 20px);
+  margin-bottom: 7%;
+}
+.about-photo {
+  width: clamp(96px, 10.2vw, 136px);
+  aspect-ratio: 4 / 5;
+  border-radius: 14px;
+  object-fit: cover;
+  object-position: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(0,0,0,.08);
+}
+.about-name {
+  font-size: clamp(22px, 2.2vw, 30px);
+  font-weight: 800;
+  color: #111;
+  margin-bottom: .25em;
+  line-height: 1.15;
+}
+.about-role {
+  font-size: clamp(12px, 1.15vw, 15px);
+  color: var(--green);
+  font-weight: 700;
+}
+.person-card {
+  background: rgba(74,143,92,.08); border: 1px solid rgba(74,143,92,.2);
+  border-radius: 12px; padding: 6% 7%; text-align: center; margin-bottom: 6%;
+}
+.person-avatar { margin-bottom: .6em; }
+.person-avatar img {
+  width: clamp(90px, 13vw, 160px);
+  height: clamp(90px, 13vw, 160px);
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(74,143,92,.3);
+  display: block; margin: 0 auto;
+}
+.person-name { font-size: clamp(18px,2.4vw,30px); font-weight: 800; color: #111; }
+.person-role { font-size: clamp(11px,1.2vw,15px); color: var(--green); font-weight: 600; margin-top: .3em; }
+.about-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #f8f8f6;
+  border: 1px solid #e8e8e4;
+  border-radius: 12px;
+  padding: 5% 6%;
+}
+.info-row {
+  display: flex; gap: 8px; align-items: center;
+  font-size: clamp(12px,1.18vw,15px); color: rgba(0,0,0,.58);
+  line-height: 1.45;
+}
+.info-row strong { color: rgba(0,0,0,.82); }
+
+.about-right-head {
+  font-size: clamp(26px, 2.7vw, 36px);
+  font-weight: 800;
+  color: #111;
+  line-height: 1.16;
+  margin-bottom: .65em;
+}
+
+/* about-right 내부 간격 — 우측 콘텐츠 넘침 방지 */
+.about-right .check-list li {
+  margin-bottom: .45em;
+  font-size: clamp(12px, 1.05vw, 15px);
+  line-height: 1.5;
+  color: rgba(0,0,0,.68);
+}
+.about-right .check-list li::before {
+  content: '•';
+  color: rgba(74,143,92,.9);
+  font-size: .95em;
+  margin-top: .1em;
+}
+.about-right .subheading {
+  margin-bottom: 4.6% !important;
+  line-height: 1.24;
+  font-size: clamp(16px, 1.7vw, 24px);
+}
+.about-right .check-list {
+  margin-top: .25em;
+}
+.about-right .rule { margin: 8px 0; }
+
+/* 창업동기 슬라이드 2컬럼 */
+.motivation-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.4%; flex: 1; margin-top: 2.2%; }
+.motivation-col {
+  background: #f8f8f6;
+  border: 1px solid #e8e8e4;
+  border-radius: 12px;
+  padding: 6.8% 6% 5.8%;
+  display: flex;
+  flex-direction: column;
+}
+.motivation-col .eyebrow {
+  margin-bottom: .65em !important;
+  font-size: clamp(14px, 1.35vw, 20px);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* ④ SERVICE */
+#s4 { background: #fff; flex-direction: column; }
+.service-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 2.5%; flex: 1; margin-top: 3%; }
+.svc-card {
+  border-radius: 12px; padding: 5% 6%;
+  display: flex; flex-direction: column;
+  border: 1px solid transparent;
+  position: relative; overflow: hidden;
+}
+.svc-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at 50% 0%, var(--card-glow, rgba(74,143,92,.12)), transparent 70%);
+}
+.svc-1 { background: #f5f5f2; border-color: rgba(74,143,92,.25); --card-glow: rgba(74,143,92,.12); }
+.svc-2 { background: #f5f5f2; border-color: rgba(245,197,24,.22); --card-glow: rgba(245,197,24,.10); }
+.svc-3 { background: #f5f5f2; border-color: rgba(139,92,246,.22); --card-glow: rgba(139,92,246,.10); }
+.svc-icon { font-size: clamp(28px, 4vw, 52px); margin-bottom: .6em; position: relative; }
+.svc-title { font-size: clamp(13px, 1.6vw, 20px); font-weight: 800; color: #111; margin-bottom: .6em; position: relative; }
+.svc-list { list-style: none; padding: 0; position: relative; }
+.svc-list li {
+  font-size: clamp(11px, 1.15vw, 15px); color: rgba(0,0,0,.6);
+  line-height: 1.5; margin-bottom: .35em;
+  padding-left: 12px; position: relative;
+}
+.svc-list li::before { content: '—'; position: absolute; left: 0; color: #444; }
+.svc-img {
+  margin-top: auto; padding-top: 6%;
+  background: rgba(0,0,0,.04); border-radius: 8px;
+  border: 1px dashed rgba(0,0,0,.09);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; padding: 8% 4%; text-align: center;
+  position: relative;
+}
+.svc-img .img-icon { font-size: clamp(20px, 3vw, 36px); }
+.svc-img p { font-size: clamp(8px,.8vw,10px); color: #555; margin-top: .4em; }
+.svc-img .req { color: var(--green); font-weight: 700; }
+
+/* ⑤ MARKET */
+#s5  { background: #fff; flex-direction: column; }
+#s5b { background: #fff; flex-direction: column; }
+.market-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3%; flex: 1; margin-top: 3%; }
+.stat-block {
+  background: rgba(0,0,0,.04); border: 1px solid rgba(0,0,0,.07);
+  border-radius: 10px; padding: 5% 6%;
+}
+.stat-block.accent { background: rgba(74,143,92,.08); border-color: rgba(74,143,92,.2); }
+.stat-row { display: flex; gap: 4%; justify-content: space-between; }
+.stat-item { text-align: center; }
+.pain-list {
+  display: flex; flex-direction: column; gap: 10px;
+}
+.pain-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: rgba(0,0,0,.03); border: 1px solid rgba(0,0,0,.05);
+  border-radius: 8px; padding: 4% 5%;
+}
+.pain-emoji { font-size: clamp(16px, 2vw, 24px); flex-shrink: 0; margin-top: 1px; }
+.price-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,.05); }
+.price-row:last-child { border-bottom: none; }
+
+/* ⑤ / ⑩ / ⑪ 하단 잘림 방지 — 컴팩트 레이아웃 */
+#s5b > div,
+#s8b > div {
+  padding: calc(4.1vw - 10px) 6% 4% !important;
+}
+#s5b .heading,
+#s8b .heading {
+  margin-bottom: 2.2% !important;
+}
+#s5b table td {
+  padding: 5px 0 !important;
+  font-size: clamp(11px, 1.05vw, 14px) !important;
+}
+#s5b .check-list li {
+  margin-bottom: .3em;
+  font-size: clamp(11px, 1.0vw, 14px);
+  line-height: 1.42;
+}
+#s8b .roof-ideas {
+  margin-top: 2%;
+  gap: 6px;
+}
+#s8b .idea-row {
+  padding: 2.8% 3.2%;
+  font-size: clamp(10px, 1vw, 13px);
+}
+#s8b .idea-row strong {
+  font-size: clamp(12px, 1.15vw, 15px) !important;
+}
+#s8b .small {
+  font-size: clamp(10px, .95vw, 13px);
+  line-height: 1.35;
+}
+
+#s9 .heading {
+  margin-bottom: 2%;
+}
+#s9 .budget-left {
+  padding: calc(4.2vw - 10px) 5% 4% 6%;
+}
+#s9 .budget-right {
+  padding: calc(4.2vw - 10px) 6% 4%;
+}
+#s9 .total-box {
+  margin-top: 4% !important;
+  margin-bottom: 4%;
+  padding: 5% 6%;
+}
+#s9 .ptable th {
+  padding: 5px 8px;
+  font-size: clamp(8px, .75vw, 10px);
+}
+#s9 .ptable td {
+  padding: 5px 8px;
+  font-size: clamp(10px, .98vw, 13px);
+}
+#s9 .bar-row {
+  gap: 8px;
+  margin-bottom: 6px;
+}
+#s9 .bar-label {
+  width: 5.2em;
+  font-size: clamp(10px, .95vw, 12px);
+}
+#s9 .bar-pct {
+  width: 2.6em;
+  font-size: clamp(10px, .95vw, 12px);
+}
+
+/* ⑥ DIFF */
+#s6 { background: #fff; flex-direction: row; align-items: stretch; }
+.diff-left { flex: 1.1; padding: calc(5vw - 12px) 5% 5% 6%; display: flex; flex-direction: column; }
+.diff-right { flex: .9; background: #f5f5f2; padding: calc(5vw - 12px) 6% 5%; display: flex; flex-direction: column; justify-content: flex-start; }
+.comp-wrap { flex: 1; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-start; margin-top: 3%; }
+.strength-list { display: flex; flex-direction: column; gap: 10px; }
+.strength-item {
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(74,143,92,.06); border: 1px solid rgba(74,143,92,.15);
+  border-radius: 8px; padding: 4% 5%;
+}
+.s-icon { font-size: clamp(16px, 2vw, 24px); flex-shrink: 0; }
+.s-text { font-size: clamp(12px,1.2vw,15px); color: rgba(0,0,0,.72); line-height: 1.4; }
+
+/* ⑦ OPS */
+#s7 { background: #fff; flex-direction: column; }
+.ops-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2.5%; flex: 1; margin-top: 3%; }
+.ops-card {
+  background: #f8f8f6; border: 1px solid #e8e8e4;
+  border-radius: 12px; padding: 5% 6%;
+}
+.ops-title { font-size: clamp(13px, 1.5vw, 19px); font-weight: 800; color: var(--green); margin-bottom: 1em; display: flex; align-items: center; gap: 8px; }
+.ops-item { font-size: clamp(12px,1.2vw,15px); color: rgba(0,0,0,.65); line-height: 1.6; margin-bottom: .4em; }
+.ops-item strong { color: #111; }
+.flow-section { margin-top: 3%; }
+.ops-flow { display: flex; align-items: center; gap: 1%; }
+.ops-node {
+  flex: 1; background: rgba(0,0,0,.04); border: 1px solid rgba(0,0,0,.07);
+  border-radius: 8px; padding: 2.5% 2%; text-align: center;
+}
+.ops-node .n-icon { font-size: clamp(16px, 2vw, 24px); display: block; margin-bottom: .3em; }
+.ops-node .n-label { font-size: clamp(10px,1.05vw,13px); color: rgba(0,0,0,.55); line-height: 1.4; }
+.ops-node .n-label strong { color: #111; display: block; }
+.ops-arr { color: #444; font-size: clamp(12px,1.5vw,18px); flex-shrink: 0; }
+
+/* ⑧ SPACE */
+#s8  { background: #fff; flex-direction: column; }
+#s8b { background: #fff; flex-direction: column; }
+.space-layout { flex: 1; display: flex; gap: 3%; margin-top: 3%; }
+.zone {
+  border-radius: 12px; padding: 5% 6%;
+  display: flex; flex-direction: column;
+}
+.zone-a { flex: 1; background: rgba(74,143,92,.06); border: 1px solid rgba(74,143,92,.2); }
+.zone-b { flex: 1.1; background: rgba(139,92,246,.06); border: 1px solid rgba(139,92,246,.2); }
+.zone-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4%; }
+.zone-sqm {
+  font-size: clamp(28px, 4vw, 52px); font-weight: 900; line-height: 1;
+}
+.zone-unit { font-size: clamp(11px,1.3vw,16px); color: var(--gray); font-weight: 500; }
+.zone-tag {
+  display: inline-block; border-radius: 4px;
+  padding: 2px 8px; font-size: clamp(8px,.8vw,10px); font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; margin-bottom: .8em;
+}
+.zt-green { background: rgba(74,143,92,.2); color: var(--green); }
+.zt-purple { background: rgba(139,92,246,.2); color: var(--purple); }
+.room-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: auto; }
+.room-tile {
+  background: rgba(0,0,0,.04); border: 1px solid rgba(0,0,0,.07);
+  border-radius: 8px; padding: 4% 4%; text-align: center;
+  font-size: clamp(11px,1.05vw,14px); color: rgba(0,0,0,.6);
+}
+.room-tile .rt-icon { font-size: clamp(16px, 2vw, 24px); display: block; margin-bottom: .3em; }
+.roof-ideas { display: flex; flex-direction: column; gap: 8px; flex: 1; margin-top: 4%; }
+.idea-row {
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(0,0,0,.03); border: 1px solid rgba(0,0,0,.05);
+  border-radius: 7px; padding: 3.5% 4%;
+  font-size: clamp(11px,1.1vw,15px); color: rgba(0,0,0,.65);
+}
+.idea-icon { font-size: clamp(14px,1.6vw,20px); flex-shrink: 0; }
+
+/* ⑨ BUDGET */
+#s9 { background: #fff; flex-direction: row; align-items: stretch; }
+.budget-left { flex: 1; padding: calc(5vw - 12px) 5% 5% 6%; display: flex; flex-direction: column; }
+.budget-right { flex: 1.1; background: #f5f5f2; padding: calc(5vw - 12px) 6% 5%; display: flex; flex-direction: column; justify-content: flex-start; }
+.total-box {
+  background: rgba(74,143,92,.08); border: 1px solid rgba(74,143,92,.2);
+  border-radius: 12px; padding: 6% 7%; text-align: center; margin-bottom: 5%;
+}
+
+/* ⑩ REVENUE */
+#s10 { background: #fff; flex-direction: column; }
+.rev-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 2%; margin-top: 3%; }
+.rev-stat {
+  background: #f8f8f6; border: 1px solid #e8e8e4;
+  border-radius: 10px; padding: 5% 6%;
+}
+.rev-stat.main { background: rgba(74,143,92,.08); border-color: rgba(74,143,92,.3); }
+.rev-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 2%; margin-top: 2%; flex: 1; }
+.rev-card {
+  background: #f8f8f6; border: 1px solid #e8e8e4;
+  border-radius: 10px; padding: 5% 6%;
+}
+
+/* ⑪ MARKETING */
+#s11 { background: #fff; flex-direction: column; }
+.mkt-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 2%; flex: 1; margin-top: 3%; }
+.mkt-card {
+  background: #f8f8f6; border: 1px solid #e8e8e4;
+  border-radius: 10px; padding: 5% 6%;
+  display: flex; flex-direction: column;
+}
+.mkt-icon { font-size: clamp(24px,3.5vw,44px); margin-bottom: .6em; }
+.mkt-title { font-size: clamp(13px,1.45vw,18px); font-weight: 800; color: #111; margin-bottom: .7em; }
+.mkt-items { list-style: none; padding: 0; flex: 1; }
+.mkt-items li { font-size: clamp(11px,1.1vw,14px); color: rgba(0,0,0,.55); line-height: 1.6; margin-bottom: .35em; padding-left: 10px; position: relative; }
+.mkt-items li::before { content: '·'; position: absolute; left: 0; color: var(--green); font-weight: 800; }
+.mkt-badge {
+  display: inline-block; background: rgba(74,143,92,.12); color: var(--green);
+  border-radius: 4px; padding: 3px 8px; font-size: clamp(8px,.8vw,10px); font-weight: 700;
+  margin-top: auto;
+}
+
+/* ⑫ COMMUNITY + GROWTH */
+#s12 { background: #fff; flex-direction: row; align-items: stretch; }
+.csr-left { flex: 1; padding: calc(5vw - 12px) 6% 5%; display: flex; flex-direction: column; }
+.csr-right { flex: 1; background: #f5f5f2; padding: calc(5vw - 12px) 6% 5%; display: flex; flex-direction: column; }
+.csr-items { display: flex; flex-direction: column; gap: 9px; margin-top: 3%; flex: 1; }
+.csr-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: rgba(0,0,0,.03); border: 1px solid rgba(0,0,0,.05);
+  border-radius: 8px; padding: 4% 5%;
+}
+.csr-em { font-size: clamp(16px,2vw,24px); flex-shrink: 0; }
+.csr-text { font-size: clamp(11px,1.1vw,15px); color: rgba(0,0,0,.65); line-height: 1.5; }
+.csr-text strong { color: var(--green); font-weight: 700; }
+.roadmap { display: flex; flex-direction: column; gap: 3%; flex: 1; margin-top: 3%; }
+.rm-row {
+  display: flex; gap: 12px; align-items: flex-start;
+  background: rgba(0,0,0,.04); border: 1px solid rgba(0,0,0,.07);
+  border-radius: 8px; padding: 4% 5%;
+  flex: 1;
+}
+.rm-year {
+  font-size: clamp(18px,2.5vw,30px); font-weight: 900; flex-shrink: 0;
+  line-height: 1; width: 2em; text-align: right;
+}
+.rm-body { flex: 1; }
+.rm-body ul { padding: 0; list-style: none; }
+.rm-body ul li { font-size: clamp(11px,1.1vw,14px); color: rgba(0,0,0,.6); line-height: 1.6; }
+.rm-body ul li::before { content: '· '; color: var(--green); }
+
+/* ⑬ CLOSING */
+#s13 {
+  background: #fff;
+  flex-direction: column; align-items: center; justify-content: center;
+  text-align: center;
+}
+.closing-brand { font-size: clamp(64px, 11vw, 140px); font-weight: 900; letter-spacing: -.05em; color: var(--green); line-height: .95; }
+.closing-sub { font-size: clamp(12px,1.5vw,19px); color: rgba(0,0,0,.45); margin-top: 1em; max-width: 70%; line-height: 1.7; }
+.closing-contact {
+  margin-top: 5%;
+  display: flex; gap: 2%; flex-wrap: wrap; justify-content: center;
+}
+.contact-item {
+  background: rgba(0,0,0,.05); border: 1px solid rgba(0,0,0,.09);
+  border-radius: 8px; padding: 3% 5%;
+  font-size: clamp(13px,1.3vw,17px); color: rgba(0,0,0,.65);
+}
+.contact-item strong { color: #111; display: block; margin-bottom: .3em; font-size: clamp(8px,.85vw,11px); color: var(--green); text-transform: uppercase; letter-spacing: .08em; }
+
+</style>
+</head>
+<body>
+<div id="app">
+
+  <aside id="sidebar">
+    <div id="sidebar-header">
+      <div id="sidebar-logo">brocally</div>
+      <div id="sidebar-sub">신촌 청년푸드스토어<br>발표자료</div>
+    </div>
+    <div id="thumbs"></div>
+  </aside>
+
+  <div id="main">
+    <div id="topbar">
+      <div id="slide-title-bar">brocally — 표지</div>
+      <div id="topbar-right">
+        <button class="tb-btn" onclick="go(-1)">이전</button>
+        <button class="tb-btn" onclick="go(1)">다음</button>
+        <button class="tb-btn primary">전체화면</button>
+      </div>
+    </div>
+
+    <div id="stage">
+      <div id="slide-wrap">
+
+        <!-- ① COVER -->
+        <div class="slide active" id="s1" data-title="표지">
+          <div class="cover-left">
+            <div class="eyebrow c-green">brocally · 신촌 청년푸드스토어</div>
+            <div class="cover-brand">brocally</div>
+            <div class="subheading" style="color:#111;font-weight:700;margin-top:1.1em;line-height:1.35;">
+              무슬림 · 비건 · 외국인 친화<br>복합 커뮤니티 카페
+            </div>
+            <div class="cover-sub">
+              신촌 상권의 국제성과 청년 소비 트렌드를 결합해,
+              할랄 · 비건 · 언어교환 서비스를 하나의 공간에서 제공합니다.
+            </div>
+            <div class="cover-meta">2026 신촌 청년푸드스토어 입점 제안 · 김준호</div>
+            <div class="cover-deco" style="width:240px;height:240px;left:-120px;bottom:-120px;"></div>
+          </div>
+
+          <div class="cover-right">
+            <div class="cover-visual">
+              <div class="big-icon">🕌&nbsp;&nbsp;🌿&nbsp;&nbsp;💬</div>
+              <div class="cover-tags">
+                <div class="cover-tag-row">
+                  <span class="icon-sm">🕌</span>
+                  <div>
+                    <div style="font-weight:700;color:#111;font-size:clamp(14px,1.6vw,20px);">무슬림 기도실 · 할랄 인증</div>
+                    <div style="font-size:clamp(11px,1.1vw,14px);color:#555;margin-top:3px;">Prayer Room + Halal Certified Menu</div>
+                  </div>
+                </div>
+                <div class="cover-tag-row">
+                  <span class="icon-sm">🌿</span>
+                  <div>
+                    <div style="font-weight:700;color:#111;font-size:clamp(14px,1.6vw,20px);">비건 전문 메뉴</div>
+                    <div style="font-size:clamp(11px,1.1vw,14px);color:#555;margin-top:3px;">Plant-based Milk · Vegan Desserts</div>
+                  </div>
+                </div>
+                <div class="cover-tag-row">
+                  <span class="icon-sm">💬</span>
+                  <div>
+                    <div style="font-weight:700;color:#111;font-size:clamp(14px,1.6vw,20px);">Language Exchange</div>
+                    <div style="font-size:clamp(11px,1.1vw,14px);color:#555;margin-top:3px;">주 2~3회 정기 언어교환 모임</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="cover-deco" style="width:220px;height:220px;right:-110px;top:-90px;"></div>
+          </div>
+        </div>
+
+        <!-- ② TOC -->
+        <div class="slide" id="s2" data-title="목차">
+          <div style="flex:1;display:flex;flex-direction:column;padding:6% 7%;">
+            <div class="eyebrow c-green">Contents</div>
+            <div class="heading c-white">발표 목차</div>
+            <div class="toc-grid">
+              <div class="toc-card hl">
+                <div class="toc-num">01</div>
+                <div class="toc-title">대표자 소개 &amp; 창업동기</div>
+                <div class="toc-desc">창업 배경, 지원동기, 역량</div>
+              </div>
+              <div class="toc-card">
+                <div class="toc-num">02</div>
+                <div class="toc-title">서비스 소개</div>
+                <div class="toc-desc">3대 핵심 서비스</div>
+              </div>
+              <div class="toc-card">
+                <div class="toc-num">03</div>
+                <div class="toc-title">시장조사 &amp; 경쟁력</div>
+                <div class="toc-desc">상권 분석 · 차별성</div>
+              </div>
+              <div class="toc-card">
+                <div class="toc-num">04</div>
+                <div class="toc-title">운영계획</div>
+                <div class="toc-desc">시간 · 인력 · 프로세스</div>
+              </div>
+              <div class="toc-card">
+                <div class="toc-num">05</div>
+                <div class="toc-title">공간 활용</div>
+                <div class="toc-desc">전용 + 루프탑 테라스</div>
+              </div>
+              <div class="toc-card">
+                <div class="toc-num">06</div>
+                <div class="toc-title">예산 &amp; 자금 조달</div>
+                <div class="toc-desc">초기 투자 2,000만원</div>
+              </div>
+              <div class="toc-card">
+                <div class="toc-num">07</div>
+                <div class="toc-title">수익 분석</div>
+                <div class="toc-desc">매출 · 손익분기점</div>
+              </div>
+              <div class="toc-card">
+                <div class="toc-num">08</div>
+                <div class="toc-title">홍보 · 성장 · 공헌</div>
+                <div class="toc-desc">마케팅 · 로드맵 · CSR</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ③ ABOUT — 대표자 소개 + 창업동기 합본 -->
+        <div class="slide" id="s3" data-title="대표자 소개">
+          <!-- 좌: 프로필 -->
+          <div class="about-left">
+            <div class="eyebrow c-green" style="margin-bottom:.45em;">01 · ABOUT</div>
+            <div class="heading" style="color:#111;margin-bottom:8%;">대표자 소개</div>
+            <div class="about-profile">
+              <img src="junkim2.jpg" alt="김준호" class="about-photo">
+              <div>
+                <div class="about-name">김준호</div>
+                <div class="about-role">개인창업 · 식음료</div>
+              </div>
+            </div>
+            <div class="about-info">
+              <div class="info-row">📋 <span><strong>지원 구분</strong>&nbsp; 개인</span></div>
+              <div class="info-row">☕ <span><strong>창업 분야</strong>&nbsp; 식음료 (카페·음료)</span></div>
+            </div>
+          </div>
+          <!-- 구분선 -->
+          <div class="about-divider"></div>
+          <!-- 우: 창업동기 & 지원동기 -->
+          <div class="about-right">
+            <div class="about-right-head">창업동기 &amp; 지원동기</div>
+            <div class="motivation-grid">
+              <div class="motivation-col">
+                <div class="eyebrow c-green" style="margin-bottom:.5em;">창업동기</div>
+                <div class="subheading" style="color:#111;">신촌에서 발견한 시장 공백</div>
+                <ul class="check-list">
+                  <li>이슬람권 학생을 위한 할랄 식품,<br> 기도실 제공 카페 신촌 전무</li>
+                  <li>비건·채식 선호 외국인 수요 증가 대비 전문 공간 극히 부족</li>
+                  <li>연세대는 드라마 촬영지 <br> 외국인 방문 수요 지속 증가 중</li>
+                  <li>단순 카페가 아닌 내·외국인 소통 커뮤니티로서 차별화</li>
+                </ul>
+              </div>
+              <div class="motivation-col">
+                <div class="eyebrow c-green" style="margin-bottom:.5em;">지원동기</div>
+                <div class="subheading" style="color:#111;">신촌 푸드스토어 선택 이유</div>
+                <ul class="check-list">
+                  <li>대학가 밀집 상권 — 주요 타겟 외국인 유학생에게 최적의 접근성</li>
+                  <li>서대문구 개방적·청년 친화 이미지와 brocally 방향성 완전 부합</li>
+                  <li>보증금·권리금 없는 지원 공간<br> →초기 자본 효율 극대화</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ④ SERVICE -->
+        <div class="slide" id="s4" data-title="서비스 소개">
+          <div style="flex:1;display:flex;flex-direction:column;padding:calc(5vw - 12px) 6% 5%;">
+            <div class="eyebrow c-green">02 · Service</div>
+            <div class="heading c-white">3대 핵심 서비스</div>
+            <div class="service-cards">
+              <div class="svc-card svc-1">
+                <div class="svc-icon">🕌</div>
+                <div class="svc-title">무슬림 친화 환경</div>
+                <ul class="svc-list">
+                  <li>기도실(Prayer Room) 상시 운영</li>
+                  <li>할랄(Halal) 인증 음료·스낵 제공</li>
+                  <li>키블라 방향 표시 · 기도 매트</li>
+                </ul>
+                <div class="svc-img" style="padding:0;overflow:hidden;border:none;background:none;">
+                  <img src="pray.jpg" alt="기도실" style="width:100%;height:clamp(65px,8vw,105px);object-fit:cover;object-position:bottom;border-radius:8px;display:block;">
+                </div>
+              </div>
+              <div class="svc-card svc-2">
+                <div class="svc-icon">🌿</div>
+                <div class="svc-title" style="color:#f5c518;">비건 전문 메뉴</div>
+                <ul class="svc-list">
+                  <li>오트·두유·아몬드 밀크 기본 제공</li>
+                  <li>비건 인증 디저트·샌드위치</li>
+                  <li>글루텐프리 옵션 운영</li>
+                </ul>
+                <div class="svc-img" style="padding:0;overflow:hidden;border:none;background:none;">
+                  <img src="vegan.png" alt="비건 메뉴" style="width:100%;height:clamp(65px,8vw,105px);object-fit:cover;object-position:center;border-radius:8px;display:block;">
+                </div>
+              </div>
+              <div class="svc-card svc-3">
+                <div class="svc-icon">💬</div>
+                <div class="svc-title" style="color:#a78bfa;">Language Exchange</div>
+                <ul class="svc-list">
+                  <li>주 2~3회 정기 모임 (회당 10~20명)</li>
+                  <li>한↔영 · 한↔기타 외국어</li>
+                  <li>주제 카드 · 파트너 매칭 방식</li>
+                  <li>참가비 10,000원/회</li>
+                  <li>첫 참가 무료 (오픈 프로모션)</li>
+                </ul>
+                <div class="svc-img" style="padding:0;overflow:hidden;border:none;background:none;">
+                  <img src="language_exchange.jpeg" alt="언어교환 모임" style="width:100%;height:clamp(65px,8vw,105px);object-fit:cover;object-position:center;border-radius:8px;display:block;">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ⑤ MARKET — 시장 분석 -->
+        <div class="slide" id="s5" data-title="시장 분석">
+          <div style="flex:1;display:flex;flex-direction:column;padding:calc(5vw - 12px) 6% 5%;">
+            <div class="eyebrow c-green">03 · Market</div>
+            <div class="heading c-white" style="margin-bottom:3%;">시장 분석</div>
+            <!-- 핵심 수치 3개 -->
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2%;margin-bottom:3%;">
+              <div style="background:rgba(74,143,92,.08);border:1px solid rgba(74,143,92,.2);border-radius:12px;padding:4% 5%;text-align:center;">
+                <div class="stat-val c-green" style="font-size:clamp(28px,4vw,52px);">6,000<span class="stat-unit">명+</span></div>
+                <div class="stat-label c-gray" style="margin-top:6px;">신촌 인근 외국인 유학생</div>
+              </div>
+              <div style="background:rgba(74,143,92,.08);border:1px solid rgba(74,143,92,.2);border-radius:12px;padding:4% 5%;text-align:center;">
+                <div class="stat-val c-green" style="font-size:clamp(28px,4vw,52px);">800<span class="stat-unit">명+</span></div>
+                <div class="stat-label c-gray" style="margin-top:6px;">무슬림 유학생 (추산)</div>
+              </div>
+              <div style="background:#f8f8f6;border:1px solid #e8e8e4;border-radius:12px;padding:4% 5%;text-align:center;">
+                <div class="stat-val" style="font-size:clamp(28px,4vw,52px);color:#d04040;">5<span class="stat-unit" style="font-size:.4em;">개</span></div>
+                <div class="stat-label c-gray" style="margin-top:6px;">신촌 내 비건·할랄 카페 (경쟁 부재)</div>
+              </div>
+            </div>
+            <!-- Pain Point 3개 -->
+            <div style="display:flex;flex-direction:column;gap:10px;flex:1;">
+              <div class="caption c-gray" style="margin-bottom:2%;">🔍 시장 공백 — Pain Point</div>
+              <div style="display:flex;align-items:flex-start;gap:12px;background:#f8f8f6;border:1px solid #e8e8e4;border-radius:10px;padding:4% 5%;flex:1;">
+                <span style="font-size:clamp(20px,2.5vw,30px);">🕌</span>
+                <div>
+                  <div style="font-size:clamp(14px,1.5vw,19px);font-weight:800;color:#222;margin-bottom:.3em;">할랄 카페 신촌 전무</div>
+                  <div class="body c-gray">이슬람권 학생, 강남·이태원까지 원정 이동 중 — 신촌·연세대 상권 내 할랄 인증 카페 0곳</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:12px;background:#f8f8f6;border:1px solid #e8e8e4;border-radius:10px;padding:4% 5%;flex:1;">
+                <span style="font-size:clamp(20px,2.5vw,30px);">🌿</span>
+                <div>
+                  <div style="font-size:clamp(14px,1.5vw,19px);font-weight:800;color:#222;margin-bottom:.3em;">비건 전문 공간 부족</div>
+                  <div class="body c-gray">수요 급증 대비 신촌 내 공급 극히 부족 — 비건 메뉴 전문 카페 전무</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:12px;background:#f8f8f6;border:1px solid #e8e8e4;border-radius:10px;padding:4% 5%;flex:1;">
+                <span style="font-size:clamp(20px,2.5vw,30px);">💬</span>
+                <div>
+                  <div style="font-size:clamp(14px,1.5vw,19px);font-weight:800;color:#222;margin-bottom:.3em;">내·외국인 교류 플랫폼 전무</div>
+                  <div class="body c-gray">언어교환 정기 모임 운영 공간 없음 — 커뮤니티 수요 대비 공급 공백</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ⑤-b 가격 전략 -->
+        <div class="slide" id="s5b" data-title="가격 전략">
+          <div style="flex:1;display:flex;flex-direction:column;padding:calc(5vw - 12px) 6% 5%;">
+            <div class="eyebrow c-green">05 · Market</div>
+            <div class="heading c-white" style="margin-bottom:4%;">가격 전략</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:3%;flex:1;">
+              <!-- 가격표 -->
+              <div style="background:#f8f8f6;border:1px solid #e8e8e4;border-radius:12px;padding:6% 7%;">
+                <div class="caption c-gray" style="margin-bottom:6%;">💰 메뉴 가격표</div>
+                <table style="width:100%;border-collapse:collapse;">
+                  <tr style="border-bottom:1px solid #e8e8e4;">
+                    <td style="font-size:clamp(12px,1.2vw,15px);color:#555;padding:7px 0;font-weight:600;">☕ 아메리카노 · 드립커피</td>
+                    <td style="font-size:clamp(12px,1.2vw,15px);color:var(--green);font-weight:700;text-align:right;">4,500 ~ 5,500원</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid #e8e8e4;">
+                    <td style="font-size:clamp(12px,1.2vw,15px);color:#555;padding:7px 0;font-weight:600;">🥛 식물성 밀크 라떼</td>
+                    <td style="font-size:clamp(12px,1.2vw,15px);color:var(--green);font-weight:700;text-align:right;">5,500 ~ 7,000원</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid #e8e8e4;">
+                    <td style="font-size:clamp(12px,1.2vw,15px);color:#555;padding:7px 0;font-weight:600;">🌙 할랄 인증 음료·티</td>
+                    <td style="font-size:clamp(12px,1.2vw,15px);color:var(--green);font-weight:700;text-align:right;">5,000 ~ 6,500원</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid #e8e8e4;">
+                    <td style="font-size:clamp(12px,1.2vw,15px);color:#555;padding:7px 0;font-weight:600;">🍪 비건 디저트·스낵</td>
+                    <td style="font-size:clamp(12px,1.2vw,15px);color:var(--green);font-weight:700;text-align:right;">3,500 ~ 5,500원</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid #e8e8e4;">
+                    <td style="font-size:clamp(12px,1.2vw,15px);color:#555;padding:7px 0;font-weight:600;">💬 언어교환 참가비</td>
+                    <td style="font-size:clamp(12px,1.2vw,15px);color:var(--green);font-weight:700;text-align:right;">10,000원 / 회</td>
+                  </tr>
+                  <tr>
+                    <td style="font-size:clamp(12px,1.2vw,15px);color:#555;padding:7px 0;font-weight:600;">🏠 소모임 공간 대관</td>
+                    <td style="font-size:clamp(12px,1.2vw,15px);color:var(--green);font-weight:700;text-align:right;">20,000원 / 시간</td>
+                  </tr>
+                </table>
+              </div>
+              <!-- 프리미엄 근거 -->
+              <div style="display:flex;flex-direction:column;gap:3%;">
+                <div style="background:rgba(74,143,92,.07);border:1px solid rgba(74,143,92,.2);border-radius:12px;padding:6% 7%;flex:1;">
+                  <div class="caption c-green" style="margin-bottom:5%;">📌 프리미엄 포지셔닝 근거</div>
+                  <ul class="check-list">
+                    <li>신촌 대학가 평균 대비 <strong style="color:var(--green);">10~15% 프리미엄</strong> 책정</li>
+                    <li>할랄·비건 인증 취득 원가 반영</li>
+                    <li>스페셜티 포지셔닝으로 가격 저항 최소화</li>
+                    <li>언어교환·대관 수익으로 음료 가격 보완</li>
+                  </ul>
+                </div>
+                <div style="background:#f8f8f6;border:1px solid #e8e8e4;border-radius:12px;padding:6% 7%;flex:1;">
+                  <div class="caption c-gray" style="margin-bottom:5%;">🎯 목표 고객별 허용 가격대</div>
+                  <ul class="check-list">
+                    <li>외국인 유학생 — 본국 카페 가격 대비 낮음, 저항 낮음</li>
+                    <li>내국인 언어교환 참가자 — 교육비 대체 효과</li>
+                    <li>무슬림 — 할랄 접근성에 프리미엄 지불 의향</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ⑥ DIFFERENTIATION -->
+        <div class="slide" id="s6" data-title="아이템 경쟁력">
+          <div class="diff-left">
+            <div class="eyebrow c-green">06 · Competitive Edge</div>
+            <div class="heading c-white">아이템 차별성 &amp; 경쟁력</div>
+            <div class="comp-wrap">
+              <table class="comp-table">
+                <tr>
+                  <th style="text-align:left;">항목</th>
+                  <th>일반 카페</th>
+                  <th>할랄 식당</th>
+                  <th style="color:var(--green);">brocally ✦</th>
+                </tr>
+                <tr>
+                  <td>할랄 인증 식품</td>
+                  <td class="no">✗</td><td class="yes">✓</td>
+                  <td class="bro">✓</td>
+                </tr>
+                <tr>
+                  <td>무슬림 기도실</td>
+                  <td class="no">✗</td><td class="no">일부</td>
+                  <td class="bro">✓</td>
+                </tr>
+                <tr>
+                  <td>비건 전문 메뉴</td>
+                  <td class="no">✗</td><td class="no">✗</td>
+                  <td class="bro">✓</td>
+                </tr>
+                <tr>
+                  <td>언어교환 프로그램</td>
+                  <td class="no">✗</td><td class="no">✗</td>
+                  <td class="bro">✓</td>
+                </tr>
+                <tr>
+                  <td>다국어 메뉴 표기</td>
+                  <td class="no">✗</td><td class="no">일부</td>
+                  <td class="bro">✓ (한·영·아랍)</td>
+                </tr>
+                <tr>
+                  <td>신촌 대학가 위치</td>
+                  <td class="no">일부</td><td class="no">✗</td>
+                  <td class="bro">✓</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="diff-right">
+            <div class="eyebrow c-green" style="margin-bottom:1em;">5가지 핵심 경쟁 우위</div>
+            <div class="strength-list">
+              <div class="strength-item">
+                <span class="s-icon">🏆</span>
+                <div class="s-text"><strong style="color:var(--green);">국내 최초 수준</strong><br>외국인, 무슬림 친화 언어교환 카페</div>
+              </div>
+              <div class="strength-item">
+                <span class="s-icon">🔄</span>
+                <div class="s-text"><strong style="color:var(--green);">강력한 재방문 동기</strong><br>언어교환 정기 모임으로 고정 고객 형성</div>
+              </div>
+              <div class="strength-item">
+                <span class="s-icon">📢</span>
+                <div class="s-text"><strong style="color:var(--green);">커뮤니티 구전 효과</strong><br>무슬림 네트워크 내 자연 확산</div>
+              </div>
+              <div class="strength-item">
+                <span class="s-icon">🌐</span>
+                <div class="s-text"><strong style="color:var(--green);">인증 신뢰도 확보</strong><br>할랄·비건 공식 인증 취득 계획</div>
+              </div>
+              <div class="strength-item">
+                <span class="s-icon">📱</span>
+                <div class="s-text"><strong style="color:var(--green);">수익 다각화 가능</strong><br>앱 연동 · 굿즈 판매 · 프랜차이즈</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ⑦ OPERATIONS -->
+        <div class="slide" id="s7" data-title="운영계획">
+          <div style="flex:1;display:flex;flex-direction:column;padding:calc(5vw - 12px) 6% 5%;">
+            <div class="eyebrow c-green">07 · Operations</div>
+            <div class="heading c-white">점포 운영계획</div>
+            <div class="ops-grid">
+              <div class="ops-card">
+                <div class="ops-title"><span>🕐</span> 운영 시간</div>
+                <div class="ops-item"><strong>평일</strong> &nbsp;10:00 ~ 22:00</div>
+                <div class="ops-item"><strong>주말</strong> &nbsp;11:00 ~ 22:00</div>
+                <div class="ops-item" style="color:#555;margin-top:.5em;">정기 휴무 없음 · 명절 단축</div>
+                <div style="height:1px;background:rgba(0,0,0,.05);margin:6% 0;"></div>
+                <div class="ops-title"><span>💬</span> 언어교환 모임</div>
+                <div class="ops-item">평일 &nbsp;<strong>19:00 ~ 21:00</strong></div>
+                <div class="ops-item">주말 &nbsp;<strong>15:00 ~ 17:00</strong></div>
+                <div class="ops-item" style="color:#555;">주 2~3회 · 회당 10~20명</div>
+              </div>
+              <div class="ops-card">
+                <div class="ops-title"><span>👥</span> 인력 구성</div>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <div style="background:rgba(0,0,0,.04);border-radius:7px;padding:4% 5%;">
+                    <div class="ops-item"><strong style="color:var(--green);">대표 1인</strong></div>
+                    <div class="ops-item" style="color:#555;">운영 총괄 · 언어교환 기획</div>
+                  </div>
+                  <div style="background:rgba(0,0,0,.04);border-radius:7px;padding:4% 5%;">
+                    <div class="ops-item"><strong>바리스타 1인</strong></div>
+                    <div class="ops-item" style="color:#555;">음료 제조 · 매장 보조</div>
+                  </div>
+                  <div style="background:rgba(0,0,0,.04);border-radius:7px;padding:4% 5%;">
+                    <div class="ops-item"><strong>파트타임 1~2인</strong></div>
+                    <div class="ops-item" style="color:#555;">피크타임 · 이벤트 지원</div>
+                  </div>
+                </div>
+              </div>
+              <div class="ops-card">
+                <div class="ops-title"><span>🔐</span> 할랄 관리 원칙</div>
+                <ul class="check-list">
+                  <li>할랄 인증 공급사 전용 계약</li>
+                  <li>비할랄과 완전 분리 보관·조리</li>
+                  <li>모든 재료 다국어 성분 표기</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ⑧ SPACE — 전용 공간 -->
+        <div class="slide" id="s8" data-title="전용 공간 활용">
+          <div style="flex:1;display:flex;flex-direction:column;padding:calc(5vw - 12px) 6% 5%;">
+            <div class="eyebrow c-green">09 · Space</div>
+            <div class="heading c-white">전용 공간 활용</div>
+            <div style="flex:1;display:flex;gap:3%;margin-top:3%;">
+              <!-- 면적 표시 -->
+              <div style="width:220px;flex-shrink:0;background:rgba(74,143,92,.06);border:1px solid rgba(74,143,92,.18);border-radius:12px;padding:5% 6%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
+                <span class="zone-tag zt-green" style="margin-bottom:12px;">전용 공간</span>
+                <div class="zone-sqm c-green" style="font-size:clamp(36px,5vw,64px);font-weight:900;line-height:1;">59.45</div>
+                <div class="zone-unit" style="color:#888;font-size:clamp(14px,1.5vw,18px);">㎡</div>
+              </div>
+              <!-- 공간 구성 -->
+              <div style="flex:1;display:flex;flex-direction:column;gap:3%;">
+                <div class="room-grid" style="margin-bottom:0;">
+                  <div class="room-tile"><span class="rt-icon">☕</span>메인 홀<br><span style="color:#555;font-size:.85em;">카페 좌석</span></div>
+                  <div class="room-tile"><span class="rt-icon">💬</span>소모임 존<br><span style="color:#555;font-size:.85em;">이동식 가구</span></div>
+                  <div class="room-tile"><span class="rt-icon">🕌</span>기도실<br><span style="color:#555;font-size:.85em;">키블라 · 칸막이</span></div>
+                  <div class="room-tile"><span class="rt-icon">🪟</span>카운터<br><span style="color:#555;font-size:.85em;">다국어 메뉴판</span></div>
+                </div>
+                <div style="background:rgba(74,143,92,.05);border:1px solid rgba(74,143,92,.15);border-radius:8px;padding:4% 5%;">
+                  <div class="body c-gray">소모임 존은 이동식 가구로 <strong style="color:#111;">2~4인 소그룹</strong>부터 <strong style="color:#111;">20인 이벤트</strong>까지 유연하게 전환 가능</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ⑧-b 루프탑 테라스 -->
+        <div class="slide" id="s8b" data-title="루프탑 테라스">
+          <div style="flex:1;display:flex;flex-direction:column;padding:calc(5vw - 12px) 6% 5%;">
+            <div class="eyebrow c-green">10 · Space</div>
+            <div class="heading c-white">루프탑 테라스 활용</div>
+            <div style="flex:1;display:flex;gap:3%;margin-top:3%;">
+              <!-- 면적 표시 -->
+              <div style="width:220px;flex-shrink:0;background:rgba(139,92,246,.05);border:1px solid rgba(139,92,246,.2);border-radius:12px;padding:5% 6%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
+                <span class="zone-tag zt-purple" style="margin-bottom:12px;">루프탑 테라스</span>
+                <div class="zone-sqm c-purple" style="font-size:clamp(36px,5vw,64px);font-weight:900;line-height:1;">74.58</div>
+                <div class="zone-unit" style="color:#888;font-size:clamp(14px,1.5vw,18px);">㎡</div>
+              </div>
+              <!-- 활용 아이디어 -->
+              <div style="flex:1;">
+                <div class="roof-ideas">
+                  <div class="idea-row"><span class="idea-icon">☀️</span><div><strong style="color:#111;font-size:clamp(13px,1.3vw,16px);">계절 야외 언어교환 모임</strong><div class="small c-gray">봄·여름·가을 루프탑 이벤트 · 개방형 테라스 활용</div></div></div>
+                  <div class="idea-row"><span class="idea-icon">📸</span><div><strong style="color:#111;font-size:clamp(13px,1.3vw,16px);">인스타그램 포토존</strong><div class="small c-gray">다국어 포토프레임 · SNS 바이럴 마케팅</div></div></div>
+                  <div class="idea-row"><span class="idea-icon">🎪</span><div><strong style="color:#111;font-size:clamp(13px,1.3vw,16px);">할랄·비건 팝업 마켓</strong><div class="small c-gray">분기 1회 개최 · 외부 협력 브랜드 입점</div></div></div>
+                  <div class="idea-row"><span class="idea-icon">🌙</span><div><strong style="color:#111;font-size:clamp(13px,1.3vw,16px);">야경 이벤트</strong><div class="small c-gray">저녁 외부 조명 · 분위기 연출</div></div></div>
+                  <div class="idea-row"><span class="idea-icon">🏷</span><div><strong style="color:#111;font-size:clamp(13px,1.3vw,16px);">루프탑 대관 서비스</strong><div class="small c-gray">소모임·스터디그룹 · 30,000원/회</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ⑨ BUDGET -->
+        <div class="slide" id="s9" data-title="예산 & 자금 조달">
+          <div class="budget-left">
+            <div class="eyebrow c-green">11 · Finance</div>
+            <div class="heading c-white">예산 &amp; 자금 조달</div>
+            <div class="total-box" style="margin-top:6%;">
+              <div class="caption c-gray" style="margin-bottom:4%;">초기 창업비용 (합계)</div>
+              <div class="stat-val c-green">2,000<span class="stat-unit">만원</span></div>
+              <div class="stat-label c-gray" style="margin-top:4%;">100% 자기자금 · 무차입 창업</div>
+            </div>
+            <div style="background:rgba(0,0,0,.03);border:1px solid rgba(0,0,0,.07);border-radius:10px;padding:5% 6%;">
+              <div class="caption c-gray" style="margin-bottom:5%;">수입 — 자금조달</div>
+              <table class="ptable">
+                <tr><th>항목</th><th style="text-align:right;">금액(만원)</th></tr>
+                <tr><td>자기자금 (저축)</td><td class="num">2,000</td></tr>
+                <tr><td class="total" style="font-weight:800;">합 계</td><td class="num total">2,000</td></tr>
+              </table>
+            </div>
+          </div>
+          <div class="budget-right">
+            <div class="caption c-gray" style="margin-bottom:5%;">지출 — 사업예산</div>
+            <table class="ptable">
+              <tr><th>항목</th><th style="text-align:right;">금액(만원)</th><th style="text-align:right;">비중</th></tr>
+              <tr><td>인테리어 공사</td><td class="num">700</td><td class="num c-gray" style="font-weight:400;">35%</td></tr>
+              <tr><td>인건비 (초기 3개월)</td><td class="num">400</td><td class="num c-gray" style="font-weight:400;">20%</td></tr>
+              <tr><td>장비구입</td><td class="num">300</td><td class="num c-gray" style="font-weight:400;">15%</td></tr>
+              <tr><td>재료구입</td><td class="num">200</td><td class="num c-gray" style="font-weight:400;">10%</td></tr>
+              <tr><td>예비비 (기도실 설치 포함)</td><td class="num">200</td><td class="num c-gray" style="font-weight:400;">10%</td></tr>
+              <tr><td>관리비·공공요금</td><td class="num">100</td><td class="num c-gray" style="font-weight:400;">5%</td></tr>
+              <tr><td>홍보비</td><td class="num">100</td><td class="num c-gray" style="font-weight:400;">5%</td></tr>
+              <tr><td class="total" style="font-weight:800;">합 계</td><td class="num total">2,000</td><td></td></tr>
+            </table>
+            <div style="margin-top:5%;">
+              <div class="caption c-gray" style="margin-bottom:4%;">예산 비중</div>
+              <div class="bar-row"><span class="bar-label">인테리어</span><div class="bar-track"><div class="bar-fill" style="width:35%;background:var(--green);"></div></div><span class="bar-pct c-green">35%</span></div>
+              <div class="bar-row"><span class="bar-label">인건비</span><div class="bar-track"><div class="bar-fill" style="width:20%;background:#7c3aed;"></div></div><span class="bar-pct c-purple">20%</span></div>
+              <div class="bar-row"><span class="bar-label">장비구입</span><div class="bar-track"><div class="bar-fill" style="width:15%;background:var(--gold);"></div></div><span class="bar-pct c-gold">15%</span></div>
+              <div class="bar-row"><span class="bar-label">재료·예비</span><div class="bar-track"><div class="bar-fill" style="width:20%;background:#3b82f6;"></div></div><span class="bar-pct" style="color:#3b82f6;">20%</span></div>
+              <div class="bar-row"><span class="bar-label">기타</span><div class="bar-track"><div class="bar-fill" style="width:10%;background:#555;"></div></div><span class="bar-pct c-gray">10%</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ⑩ REVENUE -->
+        <div class="slide" id="s10" data-title="수익 분석">
+          <div style="flex:1;display:flex;flex-direction:column;padding:calc(5vw - 12px) 6% 5%;">
+            <div class="eyebrow c-green">12 · Revenue</div>
+            <div class="heading c-white">수익 분석</div>
+            <div class="rev-grid">
+              <div class="rev-stat main">
+                <div class="caption c-green" style="margin-bottom:6%;">월 예상 매출</div>
+                <div class="stat-val c-green">1,029<span class="stat-unit">만원</span></div>
+                <div class="stat-label c-gray" style="margin-top:5%;">음료·식품 900 + 프로그램 105 + 대관 24</div>
+              </div>
+              <div class="rev-stat">
+                <div class="caption c-gray" style="margin-bottom:6%;">월 고정비</div>
+                <div class="stat-val" style="color:#ef4444;">550<span class="stat-unit">만원</span></div>
+                <div class="stat-label c-gray" style="margin-top:5%;">재료비 270 + 인건비 150 + 관리비 50 + 기타 80</div>
+              </div>
+              <div class="rev-stat" style="border-color:rgba(74,143,92,.3);background:rgba(74,143,92,.06);">
+                <div class="caption c-green" style="margin-bottom:6%;">월 순이익</div>
+                <div class="stat-val c-green">479<span class="stat-unit">만원</span></div>
+                <div class="stat-label c-gray" style="margin-top:5%;">수익률 약 <strong style="color:var(--green);">46.5%</strong></div>
+              </div>
+              <div class="rev-stat" style="border-color:rgba(245,197,24,.2);background:rgba(245,197,24,.05);">
+                <div class="caption c-gold" style="margin-bottom:6%;">손익분기점</div>
+                <div class="stat-val c-gold" style="font-size:clamp(20px,3vw,38px);">일 30잔+</div>
+                <div class="stat-label c-gray" style="margin-top:5%;">월 매출 550만원 달성 시<br>초기 3개월 내 목표</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ⑪ MARKETING -->
+        <div class="slide" id="s11" data-title="홍보·마케팅">
+          <div style="flex:1;display:flex;flex-direction:column;padding:calc(5vw - 12px) 6% 5%;">
+            <div class="eyebrow c-green">13 · Marketing</div>
+            <div class="heading c-white">홍보 &amp; 판매 전략</div>
+            <div class="mkt-grid">
+              <div class="mkt-card">
+                <div class="mkt-icon">📱</div>
+                <div class="mkt-title">온라인 SNS</div>
+                <ul class="mkt-items">
+                  <li>인스타그램·틱톡 다국어 운영 (한·영·아랍)</li>
+                  <li>무슬림·비건 해시태그 공략</li>
+                  <li>SNS 후기 → 음료 쿠폰 증정</li>
+                  <li>릴스·숏츠 언어교환 현장 콘텐츠</li>
+                </ul>
+              </div>
+              <div class="mkt-card">
+                <div class="mkt-icon">🏫</div>
+                <div class="mkt-title">대학 연계</div>
+                <ul class="mkt-items">
+                  <li>연세대·이화여대·서강대 국제처 협력</li>
+                  <li>신입 유학생 오리엔테이션 홍보 참가</li>
+                  <li>학생증 제시 할인 프로그램</li>
+                  <li>학생회·동아리 모임 공간 제공</li>
+                </ul>
+              </div>
+              <div class="mkt-card">
+                <div class="mkt-icon">🤝</div>
+                <div class="mkt-title">커뮤니티 마케팅</div>
+                <ul class="mkt-items">
+                  <li>이슬람 문화원·서울 무슬림 커뮤니티</li>
+                  <li>비건·채식 소모임 연계 홍보</li>
+                  <li>어학원·어학연수 기관 제휴</li>
+                  <li>구전 마케팅 (무슬림 네트워크)</li>
+                </ul>
+              </div>
+              <div class="mkt-card">
+                <div class="mkt-icon">🎁</div>
+                <div class="mkt-title">오픈 프로모션</div>
+                <ul class="mkt-items">
+                  <li>첫 방문 음료 1,000원 할인</li>
+                  <li>언어교환 첫 참가 무료</li>
+                  <li>스탬프 카드 — 10잔 무료 음료</li>
+                  <li>할랄·비건 메뉴 체험 증정 이벤트</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ⑫ CSR + GROWTH -->
+        <div class="slide" id="s12" data-title="지역공헌 · 성장전략">
+          <div class="csr-left">
+            <div class="eyebrow c-green">14 · Community</div>
+            <div class="heading c-white">지역사회 공헌</div>
+            <div class="csr-items">
+              <div class="csr-item">
+                <span class="csr-em">🏪</span>
+                <div class="csr-text">신촌 상권 외국인 체류시간 증대 → <strong>주변 점포 매출 기여</strong></div>
+              </div>
+              <div class="csr-item">
+                <span class="csr-em">👨‍👩‍👧</span>
+                <div class="csr-text">서대문구 다문화가족지원센터 연계 <strong>무료 언어교환 제공</strong></div>
+              </div>
+              <div class="csr-item">
+                <span class="csr-em">🎪</span>
+                <div class="csr-text">분기 1회 <strong>할랄·비건 팝업 마켓</strong> — 상권 다양성 강화</div>
+              </div>
+              <div class="csr-item">
+                <span class="csr-em">🏆</span>
+                <div class="csr-text">서대문구 <strong>청년 창업 네트워크</strong> 행사 적극 참여</div>
+              </div>
+              <div class="csr-item">
+                <span class="csr-em">✈️</span>
+                <div class="csr-text">무슬림 관광객 <strong>서대문구 방문 거점</strong> 역할 → 지역 관광 경쟁력 향상</div>
+              </div>
+            </div>
+          </div>
+          <div class="csr-right">
+            <div class="eyebrow c-green" style="margin-bottom:.8em;">중장기 성장 로드맵</div>
+            <div class="roadmap">
+              <div class="rm-row">
+                <div class="rm-year c-green">Y1</div>
+                <div class="rm-body">
+                  <div class="small c-gray" style="font-weight:700;margin-bottom:.4em;">브랜드 정착 · 손익 달성</div>
+                  <ul><li>언어교환 프로그램 정착 · 고정 고객 확보</li><li>손익분기점 3개월 내 달성</li><li>할랄·비건 인증 취득</li></ul>
+                </div>
+              </div>
+              <div class="rm-row" style="border-left:2px solid rgba(139,92,246,.3);">
+                <div class="rm-year c-purple">Y2</div>
+                <div class="rm-body">
+                  <div class="small c-gray" style="font-weight:700;margin-bottom:.4em;">외국인 필수 코스화</div>
+                  <ul><li>SNS 팔로워 1만+ · 미디어 노출 확대</li><li>루프탑 이벤트 정례화</li><li>외국인 관광 필수 방문지 등재</li></ul>
+                </div>
+              </div>
+              <div class="rm-row" style="border-left:2px solid rgba(245,197,24,.3);">
+                <div class="rm-year c-gold">Y3+</div>
+                <div class="rm-body">
+                  <div class="small c-gray" style="font-weight:700;margin-bottom:.4em;">스케일업 · 확장</div>
+                  <ul><li>언어교환 앱 론칭 · brocally 굿즈 판매</li><li>제2호점 및 프랜차이즈 검토</li><li>해외 K-culture 연계 글로벌 진출</li></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ⑬ CLOSING -->
+        <div class="slide" id="s13" data-title="마무리">
+          <div class="eyebrow c-green">Thank you</div>
+          <div class="closing-brand">brocally</div>
+          <div class="closing-sub">
+            무슬림·비건·외국인이 소외 없이 머무는 공간,<br>
+            내·외국인이 언어로 연결되는 신촌의 새로운 커뮤니티
+          </div>
+        </div>
+
+      </div><!-- /slide-wrap -->
+    </div><!-- /stage -->
+
+    <div id="bottombar">
+      <button class="nav-btn" onclick="go(-1)" title="이전 (←)">&#8592;</button>
+      <span id="slide-counter">1 / 15</span>
+      <button class="nav-btn" onclick="go(1)" title="다음 (→)">&#8594;</button>
+    </div>
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<script>
+const slides = Array.from(document.querySelectorAll('.slide'));
+const thumbsEl = document.getElementById('thumbs');
+const counterEl = document.getElementById('slide-counter');
+const titleBarEl = document.getElementById('slide-title-bar');
+let cur = 0;
+
+// Build thumbnails
+slides.forEach((sl, i) => {
+  const title = sl.dataset.title || `슬라이드 ${i+1}`;
+  const th = document.createElement('div');
+  th.className = 'thumb' + (i === 0 ? ' active' : '');
+  th.innerHTML = `<div class="thumb-preview"><strong>${title}</strong></div><span class="thumb-num">${i+1}</span>`;
+  th.addEventListener('click', () => show(i));
+  thumbsEl.appendChild(th);
+});
+
+function show(n) {
+  const thumbs = thumbsEl.querySelectorAll('.thumb');
+  slides[cur].classList.remove('active');
+  thumbs[cur].classList.remove('active');
+  cur = Math.max(0, Math.min(n, slides.length - 1));
+  slides[cur].classList.add('active');
+  thumbs[cur].classList.add('active');
+  thumbs[cur].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  counterEl.textContent = `${cur + 1} / ${slides.length}`;
+  titleBarEl.textContent = `brocally — ${slides[cur].dataset.title || ''}`;
+}
+
+function go(d) { show(cur + d); }
+
+document.addEventListener('keydown', e => {
+  if (['ArrowRight','ArrowDown','PageDown',' '].includes(e.key)) { e.preventDefault(); go(1); }
+  if (['ArrowLeft','ArrowUp','PageUp'].includes(e.key)) { e.preventDefault(); go(-1); }
+  if (e.key === 'f' || e.key === 'F') toggleFull();
+});
+
+function toggleFull() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen?.();
+  } else {
+    document.exitFullscreen?.();
+  }
+}
+
+// 전체화면 버튼 텍스트
+document.querySelector('.tb-btn.primary').addEventListener('click', toggleFull);
+show(0);
+</script>
+</body>
+</html>
